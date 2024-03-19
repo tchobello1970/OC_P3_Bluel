@@ -1,6 +1,11 @@
 // Récupération des projets depuis le fichier JSON
+
+console.log( 'js found');
+
 const reponse = await fetch('http://localhost:5678/api/works');
 const projets = await reponse.json();
+
+console.log( 'js found');
 
 function genererProjets(projets){
 
@@ -15,11 +20,8 @@ function genererProjets(projets){
         const imageElement = document.createElement("img");
         imageElement.src = projet.imageUrl;
         const nomElement = document.createElement("figcaption");
-        nomElement.innerText = article.nom;
-        const prixElement = document.createElement("p");
-        prixElement.innerText = `Prix: ${article.prix} € (${article.prix < 35 ? "€" : "€€€"})`;
-
-          
+        nomElement.innerText = projet.title;
+              
         // On rattache la balise article a la section Fiches
         sectionGallery.appendChild(ProjetElement);
         ProjetElement.appendChild(imageElement);
