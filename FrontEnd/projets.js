@@ -1,13 +1,11 @@
 // Récupération des projets depuis le fichier JSON
 
-console.log( 'js found');
-
 const reponse = await fetch('http://localhost:5678/api/works');
 const projets = await reponse.json();
 
-console.log( 'js found');
-
 function genererProjets(projets){
+
+    const categorySet = new Set();
 
     for (let i = 0; i < projets.length; i++) {
 
@@ -26,6 +24,21 @@ function genererProjets(projets){
         sectionGallery.appendChild(ProjetElement);
         ProjetElement.appendChild(imageElement);
         ProjetElement.appendChild(nomElement); 
+
+        if( categorySet.has(projet.category.name) === false ){
+            categorySet.add(projet.category.name);
+        }
+    }
+    console.log( "categorySet");
+    console.log(categorySet);
+
+    const sectionFilters = document.querySelector(".filters");
+
+    for (let category of categorySet.values()){
+        const filterElement = document.createElement("button");
+        filterElement.innerText = category;
+        filterElement.classList.add("filter");
+        sectionFilters.appendChild(filterElement);
     }
 }
 
