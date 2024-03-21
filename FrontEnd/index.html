@@ -8,6 +8,11 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
+	<link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
 	<link rel="stylesheet" href="./assets/style.css">
 	<script type="module" src="projets.js"></script>
 </head>
@@ -15,12 +20,10 @@
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li>login</li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
+		<a href="#portfolio" class="nav-title">projets</a>
+		<a href="#contact" class="nav-title">contact</a>
+		<a href="" class="nav-title">login</a>
+		<a href="" class="icon-insta"><i class="fa-lg fa-brands fa-instagram"></i></a>
 	</nav>
 </header>
 <main>
@@ -38,7 +41,7 @@
 	<section id="portfolio">
 		<h2>Mes Projets</h2>
 		<div class="filters">
-			<button class ="filter" Value="Tout">Tout</button>
+			<button id="no_filter" class ="filter" Value="Tout">Tout</button>
 		</div>
 		<div class="gallery"></div>
 	</section>

@@ -75,7 +75,6 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
@@ -84,20 +83,36 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
-nav ul {
+nav {
 	display: flex;
 	align-items: center;
-	list-style-type: none;
-
 }
-nav li {
-	padding: 0 10px;
+nav a {
+	display: flex;
 	font-size: 1.2em;
 }
 
-li:hover {
+a {
+    color: inherit; /* to keep parent color */
+    text-decoration: none; /* to avoid link specific colors */
+}
+
+.nav-title {
+	width: 99px;
+	justify-content:center;
+}
+
+
+.icon-insta{
+	width: 50px;
+	justify-content:right;
+}
+
+a:hover {
 	color: #B1663C;
 }
+
+
 #introduction {
 	display: flex;
 	align-items: center;
