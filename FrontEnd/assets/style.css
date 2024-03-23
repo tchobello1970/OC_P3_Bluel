@@ -22,6 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	background-color: #FFfef8;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -59,7 +60,7 @@ header {
 	margin: 50px 0
 }
 section {
-	margin: 50px 0
+	margin: 80px 0
 }
 
 h1{
@@ -68,13 +69,15 @@ h1{
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
+	gap:10px;
 }
 
 h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
+	text-transform: uppercase;
 }
 
 h2{
@@ -82,6 +85,12 @@ h2{
 	font-weight: 700;
 	font-size: 30px;
 	color: #1D6154
+}
+
+p {
+	color:#3f3f3f;
+	
+
 }
 nav {
 	display: flex;
@@ -154,12 +163,17 @@ a:hover {
 	border: solid 1px #1D6154;
 	border-radius: 60px;
 	padding: 10px;
-	background-color: white;
+	background-color: #FFfef8;
+}
+
+.filter-selected{
+	background-color: #1D6154;
+	color: #FFfef8;
 }
 
 .filter:hover{
 	background-color: #1D6154;
-	color: white;
+	color: #FFfef8;
 }
 
 button{
@@ -173,21 +187,22 @@ button{
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+	grid-column-gap: 18px;
+	grid-row-gap: 16px;
 }
 
 .gallery img {
 	width: 100%;
-
+	margin-bottom: 5px;
 }
+
+
 #contact {
 	width: 50%;
-margin: auto;
+    margin: auto;
 }
 #contact > * {
 	text-align: center;
-
 }
 #contact h2{
 	margin-bottom: 20px;
@@ -222,6 +237,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	height: 38px;
 }
 
 footer nav ul {
