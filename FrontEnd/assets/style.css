@@ -23,18 +23,14 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 	background-color: #FFfef8;
+	box-sizing: border-box;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
+
 blockquote, q {
 	quotes: none;
 }
@@ -49,18 +45,25 @@ table {
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
+	max-width: 1440px;
 	margin:auto;
-	font-family: 'Work Sans' ;
+    font-family: 'Work Sans' ;
 	font-size: 14px;
+	line-height: 1;
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	max-width: 1140px;
+	margin: 50px 150px 58px 150px;
 }
+
 section {
-	margin: 80px 0
+	margin: 73px 0
 }
 
 h1{
@@ -70,7 +73,7 @@ h1{
 	font-size: 22px;
 	font-weight: 800;
 	color: #B1663C;
-	gap:10px;
+	justify-content: space-between;
 }
 
 h1 > span {
@@ -96,7 +99,7 @@ nav {
 	display: flex;
 	align-items: center;
 }
-nav a {
+header nav a {
 	display: flex;
 	font-size: 1.2em;
 }
@@ -121,30 +124,44 @@ a:hover {
 	color: #B1663C;
 }
 
+main{
+	display:flex;
+	flex-direction: column;
+	justify-content:center;
+	align-items: center;
+	margin: 20px 245px;
+	font: inherit;
+}
 
 #introduction {
 	display: flex;
 	align-items: center;
 }
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
 #introduction img {
 	display: block;
 	margin: auto;
-	width: 80%;
+	width: 100%;
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
+	
 }
 #introduction h2 {
 	margin-bottom: 1em;
+	padding-left: 75px;
 }
 
 #introduction p {
 	margin-bottom: 0.5em;
+	padding-left: 75px;
+	line-height: 16.42px;
 }
+
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -156,6 +173,7 @@ a:hover {
 	justify-content: center;
 	margin: 50px 0;
 	gap: 10px;
+	height: 40px;
 }
 
 .filter{
@@ -199,7 +217,8 @@ button{
 
 #contact {
 	width: 50%;
-    margin: auto;
+	margin-top: -13px;
+	margin-bottom: 0;
 }
 #contact > * {
 	text-align: center;
@@ -214,7 +233,7 @@ button{
 	flex-direction: column;
 }
 
-#contact input {
+input[type="text"], input[type="email"] {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -222,6 +241,8 @@ button{
 }
 #contact label {
 	margin: 2em 0 1em 0;
+	font-size: 14px;
+	font-weight: 500;
 }
 #contact textarea {
 	border: none;
@@ -237,12 +258,22 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
-	height: 38px;
+	height: 36px;
 }
 
-footer nav ul {
+footer{
+	max-width: 1440px;
+	width: 100%;
+	margin: 0;
+	/*height: 60px;*/
+}
+
+footer nav{
+
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 2em 110px;
+	font-size: 1em;
+	font-weight: 300;
 }
 

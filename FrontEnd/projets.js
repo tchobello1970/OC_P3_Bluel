@@ -36,10 +36,9 @@ function genererFiltres(projets){
                 projetsFiltres = projets.filter(function (projet) {
                     return projet.category.name === category;
                 });
-
-                let elements = document.querySelectorAll('.filter-selected');
-                elements.forEach( function(element) {element.classList.remove('filter-selected');});
-            }
+           }
+            let elements = document.querySelectorAll('.filter-selected');
+            elements.forEach( function(element) {element.classList.remove('filter-selected');});
 
             filterElement.classList.add("filter-selected");
 
