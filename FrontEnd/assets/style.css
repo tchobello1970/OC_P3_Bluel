@@ -120,6 +120,10 @@ a {
 	justify-content:right;
 }
 
+.nav-600{
+	font-weight: 600;
+}
+
 a:hover {
 	color: #B1663C;
 }
@@ -249,6 +253,39 @@ input[type="text"], input[type="email"] {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+
+
+
+#login {
+	width: 50%;
+	margin: auto;
+}
+#login > * {
+	text-align: center;
+
+}
+#login h2{
+	margin-bottom: 20px;
+}
+#login form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#login input {
+	height: 36px;
+	font-size: 1em;
+	border: none;
+	
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#login label {
+	margin: 2em 0 1em 0;
+}
+
+
 input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -258,18 +295,36 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
-	height: 36px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 footer{
 	max-width: 1440px;
 	width: 100%;
-	margin: 0;
-	/*height: 60px;*/
+	/*margin: 0;*/
+	height: 60px;
 }
 
 footer nav{
-
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em 110px;
