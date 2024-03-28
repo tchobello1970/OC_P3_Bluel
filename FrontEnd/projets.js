@@ -3,8 +3,6 @@
 const reponse = await fetch('http://localhost:5678/api/works');
 const projets = await reponse.json();
 
-
-
 function genererFiltres(projets){
     // a new Set of categories is created
     const categorySet = new Set();
@@ -65,5 +63,29 @@ function genererProjets(projets){
     });
 }
 
+function genererPage(){
+        document.getElementById("nav-logout").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        sessionStorage.removeItem("token"); // Appelle la fonction
+    });
+    
+    
+    if( sessionStorage.getItem("token")){
+        document.getElementById("nav-login").classList.add("hidden");
+    }
+    else{
+        console.log('pas de token');
+        document.getElementById("editor-id").classList.add("hidden");
+        document.getElementById("nav-logout").classList.add("hidden");
+        document.getElementById("modify-id").classList.add("hidden");
+    }
+
+}
+
+
+genererPage();
 genererFiltres(projets);
 genererProjets(projets);
+
+
+
