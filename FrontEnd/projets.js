@@ -107,8 +107,14 @@ function genererPage(){
     document.getElementById("nav-logout").addEventListener("click", function(event) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
         sessionStorage.removeItem("token"); // Appelle la fonction
-});
+        window.location.href = "index.html";
+    });
 
+    // modify
+    document.getElementById("modify-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        //TODO modale 
+    });
 }
 
 
