@@ -38,17 +38,11 @@ btn_connection.addEventListener("click", (event) => {
     */
         fetch("http://localhost:5678/api/users/login", requestOptions)
         .then(response => {
-            console.log('response');
-            console.log(response);
             if (!response.ok) {
                 // déclenche le catch error
                 throw new Error('Erreur lors de la requête');
             }
-            return response.json(); // Analyse la réponse en JSON
-        })
-        .then(data => {
-            // succesful connection: token is in saved in sessionStorage and 
-            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("token", response.json().token);
             window.location.href = "index.html";
         })
         .catch(error => {
