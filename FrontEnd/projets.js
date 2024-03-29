@@ -1,7 +1,18 @@
-// Récupération des projets depuis le fichier JSON
 
+
+// Récupération des projets depuis le fichier JSON
 const reponse = await fetch('http://localhost:5678/api/works');
 const projets = await reponse.json();
+
+
+/***********************************
+ * 
+ * dynamic filters in index.html
+ * 
+ **********************************/
+
+
+
 
 function genererFiltres(projets){
     // a new Set of categories is created
@@ -23,24 +34,33 @@ function genererFiltres(projets){
         filterElement.classList.add("filter");
 
         if( category === "Tout" ){
+            /* default selected (green button) */
             filterElement.classList.add("filter-selected");
         }
 
         sectionFilters.appendChild(filterElement);
         filterElement.addEventListener("click", function () {
+            
             let projetsFiltres = projets;
+
+
             if( category !== "Tout")
             {
                 projetsFiltres = projets.filter(function (projet) {
                     return projet.category.name === category;
                 });
-           }
+            } 
+            
+            // update selected filter (green button)
+            // remove all
             let elements = document.querySelectorAll('.filter-selected');
             elements.forEach( function(element) {element.classList.remove('filter-selected');});
-
+            // add new one 
             filterElement.classList.add("filter-selected");
 
+            // remove all projects
             document.querySelector(".gallery").innerHTML = "";
+            // add selected prjects
             genererProjets(projetsFiltres);
             }
         );
@@ -63,12 +83,15 @@ function genererProjets(projets){
     });
 }
 
+
+/*****************************
+ * 
+ * generates page in both cases logged or not
+ * removes token in sesssionStorage in clikc on logout
+ * 
+ *******************************/
+
 function genererPage(){
-        document.getElementById("nav-logout").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        sessionStorage.removeItem("token"); // Appelle la fonction
-    });
-    
     
     if( sessionStorage.getItem("token")){
         document.getElementById("nav-login").classList.add("hidden");
@@ -79,6 +102,12 @@ function genererPage(){
         document.getElementById("nav-logout").classList.add("hidden");
         document.getElementById("modify-id").classList.add("hidden");
     }
+
+    // logout
+    document.getElementById("nav-logout").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        sessionStorage.removeItem("token"); // Appelle la fonction
+});
 
 }
 

@@ -1,16 +1,14 @@
 
 console.log('login activation');
-//const reponse = await fetch('http://localhost:5678/api/users/login');
-//const users = await reponse.json();
-
 
 
 const btnConnection = document.getElementById("btn_connection")
 
 btn_connection.addEventListener("click", (event) => {
-    event.preventDefault();
-    console.log("Il n’y a pas eu de rechargement de page");
+    event.preventDefault(); // to prevent page reloading
 
+
+/* check fields */
     if( verifierChamp(email) && verifierChamp(password)) {
 
         // Création de l’objet du login.
@@ -23,16 +21,18 @@ btn_connection.addEventListener("click", (event) => {
     
         const requestOptions = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // Spécifie le type de contenu JSON
-            },
+            headers: {'Content-Type': 'application/json' }, // Spécifie le type de contenu JSON
             body: chargeUtile
         };
         
 
-    /* le fetch renvoie un Promise (resolve,reject)
+    /* 
+        connexion à l'API
+        le fetch renvoie un Promise (resolve,reject)
+
         then renvoie la réponse en cas de succès et 
         catch renvoie l'erreur en cas de reject
+        
         response est la réponse http complète
         data sont les données extraites (la réponse après un appel valide)
     */
@@ -47,6 +47,7 @@ btn_connection.addEventListener("click", (event) => {
             return response.json(); // Analyse la réponse en JSON
         })
         .then(data => {
+            // succesful connection: token is in saved in sessionStorage and 
             sessionStorage.setItem("token", data.token);
             window.location.href = "index.html";
         })
@@ -59,6 +60,12 @@ btn_connection.addEventListener("click", (event) => {
 
 });
 
+
+/*************************
+ * 
+ * removes error message when clicking on email or password field
+ * 
+ ************************/
 const field_email = document.getElementById("email");
 field_email.addEventListener("click", (event) => {
     event.preventDefault();
@@ -71,6 +78,7 @@ field_password.addEventListener("click", (event) => {
     supprimerErreur();
 });
 
+
 function supprimerErreur(){
     const erreurElement = document.querySelector("#erreur-id");
     if (erreurElement) {
@@ -79,8 +87,9 @@ function supprimerErreur(){
     }
 }
 
+
 function afficherErreur(messsage){
-    console.log('afficheRerruer');
+    console.log('afficheErreur');
     const mainElement = document.querySelector("main");
     const erreurElement = document.createElement("h2");
     erreurElement.id = "erreur-id";
@@ -88,6 +97,12 @@ function afficherErreur(messsage){
     mainElement.appendChild(erreurElement);
 
 }
+
+
+/********************************
+ *  check if empty
+ *  specific regex check on email 
+ ********************************/
 
 function verifierChamp(champ) {
     // Si le champ est vide, on lance une exception
