@@ -69,7 +69,9 @@ function genererFiltres(projets){
 
 
 function genererProjets(projets){
-    Object.values(projets).forEach( projet => {     
+    console.log('générerprojets')
+    Object.values(projets).forEach( projet => {  
+        //console.log(projet);   
         const sectionGallery = document.querySelector(".gallery");
         const ProjetElement = document.createElement("figure");
         const imageElement = document.createElement("img");
@@ -79,8 +81,40 @@ function genererProjets(projets){
                    
         sectionGallery.appendChild(ProjetElement);
         ProjetElement.appendChild(imageElement);
-        ProjetElement.appendChild(nomElement); 
+        ProjetElement.appendChild(nomElement);
+
+        const modalGallery = document.querySelector(".modal-gallery");
+        const modalProjetElement = document.createElement("figure");
+        modalProjetElement.classList.add("image-container");
+        const modalImageElement = document.createElement("img");
+        modalImageElement.src = projet.imageUrl;
+        const modalDustbinElement = document.createElement("div");
+        modalDustbinElement.id = "img_"+projet.id;
+        modalDustbinElement.classList.add("dustbin-container");
+        const modalDustbinImg = document.createElement("span");
+        modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
+        modalDustbinImg.setAttribute("aria-hidden", "true");
+
+        modalGallery.appendChild(modalProjetElement);
+        modalProjetElement.appendChild(modalImageElement);
+        modalProjetElement.appendChild(modalDustbinElement);
+        modalDustbinElement.appendChild(modalDustbinImg);
+        //TODO Ajouter la poubelle ProjetElement.appendChild(nomElement);
+
     });
+    const modal = document.getElementById("modale-1");
+    console.log('test hidden');
+    console.log(modal.classList.contains("hidden") );
+    if (modal.classList.contains("hidden") === false)
+    {
+        document.body.addEventListener('click', function(event) {
+            // Vérifiez si le clic a eu lieu en dehors de la modale
+            
+            if (document.getElementById("modale-1").contains(event.target === false) ) {
+                document.getElementById("modale-1").classList.toggle("hidden");
+            }
+        });
+    }
 }
 
 
@@ -113,8 +147,16 @@ function genererPage(){
     // modify
     document.getElementById("modify-id").addEventListener("click", function(event) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
-        //TODO modale 
+        document.getElementById("modale-1").classList.toggle("hidden");
     });
+
+    //modale
+    document.getElementById("close-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById("modale-1").classList.toggle("hidden");
+    });
+
+
 }
 
 
