@@ -138,44 +138,12 @@ function genererPage(){
         // add listener to body to close modal only when modal is visible
         document.body.addEventListener('click', closeModal);
     });
-/*
-    //modale1
-      // closes modal: hides elements and removes listeners
-    document.getElementById("close-id").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        document.getElementById("modale-1").classList.add("hidden");
-        document.getElementById("go-back-id").classList.add("hidden");
-        document.body.removeEventListener('click', closeModal);
-    });
-
-    // modale add project
-      // second view: show/hides elements and updates texts
-    document.getElementById("btn-val").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        document.getElementById("go-back-id").classList.remove("hidden");
-        document.getElementById("modal-gallery-id").classList.add("hidden");
-        document.getElementById("modal-form-id").classList.remove("hidden");
-        document.getElementById('modal-title').textContent = "Ajout photo";
-        document.getElementById('btn-val').textContent = "Valider";
-        
-
-    }); 
-    
-    // modale go back project
-      // first view: show/hides elements and updates texts
-    document.getElementById("go-back-id").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        document.getElementById("go-back-id").classList.add("hidden");
-        document.getElementById("modal-gallery-id").classList.remove("hidden");
-        document.getElementById("modal-form-id").classList.add("hidden");
-        document.getElementById('modal-title').textContent = "Galerie photo";
-        document.getElementById('btn-val').textContent = "Ajouter photo";
-    }); 
-*/
 }
 
 function generateModal1Gallery(projets) {
 
+    document.getElementById("go-back-id").classList.add("hidden");
+    
     document.getElementById('modal-title').textContent = "Galerie photo";
 
     const modalGalleryContainer = document.createElement("div");
@@ -253,8 +221,8 @@ function generateModal1Form(){
     document.getElementById('modal-title').textContent = "Ajout photo";
 
     const modalFormElement = document.createElement("form");
-    modalFormElement.setAttribute("action", "#");
-    modalFormElement.setAttribute("method", "post");
+    modalFormElement.action = "#";
+    modalFormElement.method = "post";
     modalFormElement.id = "modal-form-id";
 
     const modalFileBoxElement = document.createElement("div");
@@ -262,38 +230,33 @@ function generateModal1Form(){
     modalFileBoxElement.id = "modal-file-box-id";
 
     const modalLabelTitreElement = document.createElement("label");
-    modalLabelTitreElement.setAttribute("for", "titre");
+    modalLabelTitreElement.for = "titre";
     modalLabelTitreElement.innerHTML = "titre";
    
-
     const modalFormTitreElement = document.createElement("input");
-    modalFormTitreElement.setAttribute("type", "text");
-    modalFormTitreElement.setAttribute("name", "titre");
-    modalFormTitreElement.setAttribute("id", "titre");
-
+    modalFormTitreElement.type = "text";
+    modalFormTitreElement.name = "titre";
+    modalFormTitreElement.id = "titre";
 
     const modalLabelCategorieElement = document.createElement("label");
-    modalLabelCategorieElement.setAttribute("for", "categorie");
+    modalLabelCategorieElement.for = "categorie";
     modalLabelCategorieElement.innerHTML = "catégorie";
 
     const modalSelectCategorieElement = document.createElement("select");
-    modalSelectCategorieElement.setAttribute("name", "titre");
-    modalSelectCategorieElement.setAttribute("id", "titre");
+    modalSelectCategorieElement.name = "titre";
+    modalSelectCategorieElement.id = "titre";
 
     for (const category of categorySet.values()){
         const optionElement = document.createElement("option");
         optionElement.innerText = category;
         optionElement.value = category;
         modalSelectCategorieElement.appendChild(optionElement);
-
     }
 
-
     const modalSubmitElement = document.createElement("input");
-    modalSubmitElement.setAttribute("type", "submit");
-    modalSubmitElement.setAttribute("value", "Valider");
-    //modalSubmitElement.value ="Valider";
-
+    modalSubmitElement.type = "submit";
+    modalSubmitElement.value ="Valider";
+ 
     const modalWrapperElement = document.querySelector(".modal-wrapper");
     modalWrapperElement.appendChild(modalFormElement);
     modalFormElement.appendChild(modalFileBoxElement);
@@ -302,22 +265,7 @@ function generateModal1Form(){
     modalFormElement.appendChild(modalLabelCategorieElement);
     modalFormElement.appendChild(modalSelectCategorieElement);
 
-
     modalFormElement.appendChild(modalSubmitElement);
-
-
-/*
-<form action="#" method="post">
-			<label for="name">Nom</label>
-			<input type="text" name="name" id="name">
-			<label for="email">Email</label>
-			<input type="email" name="email" id="email">
-			<label for="message">Message</label>
-			<textarea name="message" id="message" cols="30" rows="12"></textarea>
-			<input type="submit" value="Envoyer">
-		</form>*/
-
-
 
 }
 
@@ -379,24 +327,6 @@ function generateModal1(){
 
 }
 
-/*	<aside id="modale-1" class="modal hidden">
-		<div class="modal-wrapper">
-                <div class="modal-icons">
-					<div class="icon-wrapper" id="close-id">
-						<div class="fa-lg fa-solid fa-xmark" aria-hidden="true"></div>
-					</div>
-					<div class="icon-wrapper hidden" id="go-back-id">
-						<span class="fa-lg fa-solid fa-arrow-left" aria-hidden="true"></span>
-					</div>					
-				</div>
-				<h2 id="modal-title">Galerie photo</h2>
-				<div class="modal-gallery" id="modal-gallery-id"></div>
-				<div class="modal-validation"></div>
-				<button class="modal-button" id="btn-val">Ajouter une photo</button>			
-		</div>
-	</aside>*/
-
-
 
 /************************************
  * 
@@ -408,22 +338,10 @@ function generateModal1(){
 function closeModal(event){
     event.preventDefault();
     //console.log(event.target.id);
-    if( event.target.id =="modale-1")
+    if( event.target.id == "modale-1" )
     {
-       
         document.getElementById("modale-1").remove();
-        
         document.body.removeEventListener('click', closeModal);       
-        
-        
-     /*   
-        document.getElementById("modale-1").classList.add("hidden");
-        document.body.removeEventListener('click', closeModal);
-        document.getElementById("go-back-id").classList.add("hidden");
-        document.getElementById("modal-gallery-id").classList.remove("hidden");
-        document.getElementById("modal-form-id").classList.add("hidden");
-        document.getElementById('modal-title').textContent = "Galerie photo";
-        document.getElementById('btn-val').textContent = "Ajouter photo";*/
     }
 };
 
@@ -437,15 +355,14 @@ function closeModal(event){
 
 
 function removeProject(event){
-    //event.preventDefault();
-    //console.log(event.target);
+    event.preventDefault();
+
     const dustbin = event.target;
     const projectName = dustbin.parentNode.id; // img_5
-    //console.log(projectName );
     const projectId = projectName.slice(4); // removes first 4 characterss
-    //console.log("dernierCaractere "+projectId);
+    
     const token =  sessionStorage.getItem("token"); 
-    //console.log('token '+token); 
+    
     const requestOptions = {
         method: 'DELETE',
         headers: {
@@ -463,9 +380,6 @@ function removeProject(event){
             // déclenche le catch error
             throw new Error('Erreur lors de la requête');
         }
-        else{
-            document.getElementById("modale-1").classList.remove("hidden");
-        }
 
     })
     .catch(error => {
@@ -478,6 +392,7 @@ function removeProject(event){
 genererPage();
 genererFiltres(projets);
 genererProjets(projets);
+
 
 
 

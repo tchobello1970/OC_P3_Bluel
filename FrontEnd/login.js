@@ -44,11 +44,7 @@ btn_connection.addEventListener("click", (event) => {
             }
             else
             {
-                console.log('REPONSE');
-                console.log(response);
                 response.json().then(data => {
-                    console.log('DATA');
-                    console.log(data);
                     sessionStorage.setItem("token", data.token);
                     window.location.href = "index.html";
                 });
@@ -57,7 +53,6 @@ btn_connection.addEventListener("click", (event) => {
         .catch(error => {
             console.error('Une erreur s\'est produite:', error);
             afficherErreur("Connexion non établie. Vérifiez l'email et le mot de passe...")
-
         });
     }
 
