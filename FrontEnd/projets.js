@@ -4,19 +4,20 @@
 const reponse = await fetch('http://localhost:5678/api/works');
 const projets = await reponse.json();
 
+const categorySet = new Set();
+
 
 /***********************************
  * 
  * dynamic filters in index.html
  * 
+ *   add all categories and listeners to filter projects
+ * 
  **********************************/
-
-
-
 
 function genererFiltres(projets){
     // a new Set of categories is created
-    const categorySet = new Set();
+   // const categorySet = new Set();
     categorySet.add("Tout");
 
     // loop all projects and add each category name once
@@ -37,13 +38,14 @@ function genererFiltres(projets){
             /* default selected (green button) */
             filterElement.classList.add("filter-selected");
         }
-
+        
+        // filter is added in the DOM
         sectionFilters.appendChild(filterElement);
+
+        // listener on click
         filterElement.addEventListener("click", function () {
-            
+            // picks all projects whose category matches (useless for 'tout')
             let projetsFiltres = projets;
-
-
             if( category !== "Tout")
             {
                 projetsFiltres = projets.filter(function (projet) {
@@ -67,66 +69,49 @@ function genererFiltres(projets){
     }
 }
 
+/***********************************
+ * 
+ * dynamic projects in index.html
+ * 
+ *    add images in main page and thumbnails in modal page
+ * 
+ **********************************/
 
 function genererProjets(projets){
-    console.log('générerprojets')
+    console.log('générerprojets');
+    
+
     Object.values(projets).forEach( projet => {  
         //console.log(projet);   
-        const sectionGallery = document.querySelector(".gallery");
+        
+        // creates main page element
         const ProjetElement = document.createElement("figure");
+          // img
         const imageElement = document.createElement("img");
-        imageElement.src = projet.imageUrl;
+        imageElement.src = projet.imageUrl; // adds API value
+          // title
         const nomElement = document.createElement("figcaption");
-        nomElement.innerText = projet.title;
-                   
+        nomElement.innerText = projet.title; // adds API value
+
+        // adds elements to the DOM
+        const sectionGallery = document.querySelector(".gallery");
         sectionGallery.appendChild(ProjetElement);
         ProjetElement.appendChild(imageElement);
         ProjetElement.appendChild(nomElement);
-
-        const modalGallery = document.querySelector(".modal-gallery");
-        const modalProjetElement = document.createElement("figure");
-        modalProjetElement.classList.add("image-container");
-        const modalImageElement = document.createElement("img");
-        modalImageElement.src = projet.imageUrl;
-        const modalDustbinElement = document.createElement("div");
-        modalDustbinElement.id = "img_"+projet.id;
-        modalDustbinElement.classList.add("dustbin-container");
-        const modalDustbinImg = document.createElement("span");
-        modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
-        modalDustbinImg.setAttribute("aria-hidden", "true");
-
-        modalGallery.appendChild(modalProjetElement);
-        modalProjetElement.appendChild(modalImageElement);
-        modalProjetElement.appendChild(modalDustbinElement);
-        modalDustbinElement.appendChild(modalDustbinImg);
-        //TODO Ajouter la poubelle ProjetElement.appendChild(nomElement);
-
     });
-    const modal = document.getElementById("modale-1");
-    console.log('test hidden');
-    console.log(modal.classList.contains("hidden") );
-    if (modal.classList.contains("hidden") === false)
-    {
-        document.body.addEventListener('click', function(event) {
-            // Vérifiez si le clic a eu lieu en dehors de la modale
-            
-            if (document.getElementById("modale-1").contains(event.target === false) ) {
-                document.getElementById("modale-1").classList.toggle("hidden");
-            }
-        });
-    }
 }
 
 
 /*****************************
  * 
  * generates page in both cases logged or not
- * removes token in sesssionStorage in clikc on logout
+ * removes token in sesssionStorage in click on logout
  * 
  *******************************/
 
+
+// show/hide DOM elements if logged in or not
 function genererPage(){
-    
     if( sessionStorage.getItem("token")){
         document.getElementById("nav-login").classList.add("hidden");
     }
@@ -140,22 +125,352 @@ function genererPage(){
     // logout
     document.getElementById("nav-logout").addEventListener("click", function(event) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
-        sessionStorage.removeItem("token"); // Appelle la fonction
-        window.location.href = "index.html";
+        sessionStorage.removeItem("token");
+        window.location.href = "index.html";  // go back to main page in all cases
     });
 
     // modify
     document.getElementById("modify-id").addEventListener("click", function(event) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
-        document.getElementById("modale-1").classList.toggle("hidden");
+        //document.getElementById("modale-1").classList.remove("hidden"); // display modal
+        generateModal1();
+        generateModal1Gallery(projets);
+        // add listener to body to close modal only when modal is visible
+        document.body.addEventListener('click', closeModal);
     });
-
-    //modale
+/*
+    //modale1
+      // closes modal: hides elements and removes listeners
     document.getElementById("close-id").addEventListener("click", function(event) {
         event.preventDefault(); // Empêche le comportement par défaut du lien
-        document.getElementById("modale-1").classList.toggle("hidden");
+        document.getElementById("modale-1").classList.add("hidden");
+        document.getElementById("go-back-id").classList.add("hidden");
+        document.body.removeEventListener('click', closeModal);
     });
 
+    // modale add project
+      // second view: show/hides elements and updates texts
+    document.getElementById("btn-val").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById("go-back-id").classList.remove("hidden");
+        document.getElementById("modal-gallery-id").classList.add("hidden");
+        document.getElementById("modal-form-id").classList.remove("hidden");
+        document.getElementById('modal-title').textContent = "Ajout photo";
+        document.getElementById('btn-val').textContent = "Valider";
+        
+
+    }); 
+    
+    // modale go back project
+      // first view: show/hides elements and updates texts
+    document.getElementById("go-back-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById("go-back-id").classList.add("hidden");
+        document.getElementById("modal-gallery-id").classList.remove("hidden");
+        document.getElementById("modal-form-id").classList.add("hidden");
+        document.getElementById('modal-title').textContent = "Galerie photo";
+        document.getElementById('btn-val').textContent = "Ajouter photo";
+    }); 
+*/
+}
+
+function generateModal1Gallery(projets) {
+
+    document.getElementById('modal-title').textContent = "Galerie photo";
+
+    const modalGalleryContainer = document.createElement("div");
+    modalGalleryContainer.classList.add("modal-gallery");
+    modalGalleryContainer.id = "modal-gallery-id";
+
+    const modalWrapperElement = document.querySelector(".modal-wrapper");
+    modalWrapperElement.appendChild(modalGalleryContainer);
+
+    Object.values(projets).forEach( projet => {
+           // creates modal page element
+           const modalFigureElement = document.createElement("figure");
+           modalFigureElement.classList.add("image-container");
+             // img
+           const modalImageElement = document.createElement("img");
+           modalImageElement.src = projet.imageUrl; // adds API value
+             // dustbin container
+           const modalDustbinElement = document.createElement("div");
+           modalDustbinElement.id = "img_"+projet.id; // updates id with API value
+           modalDustbinElement.classList.add("dustbin-container");
+             // dustbin img
+           const modalDustbinImg = document.createElement("span");
+           modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
+           modalDustbinImg.setAttribute("aria-hidden", "true");
+           modalDustbinImg.addEventListener('click', removeProject);
+    
+        // adds elements to the DOM
+           const modalGallery = document.querySelector(".modal-gallery");
+           modalGallery.appendChild(modalFigureElement);
+           modalFigureElement.appendChild(modalImageElement);
+           modalFigureElement.appendChild(modalDustbinElement);
+           modalDustbinElement.appendChild(modalDustbinImg);
+    });
+
+    const modalLine1Element = document.createElement("div");
+    modalLine1Element.classList.add("modal-line");
+    modalLine1Element.id = "modal-line-id";
+
+    const modalButtonElement = document.createElement("button");
+    modalButtonElement.classList.add("modal-button");
+    modalButtonElement.id = "btn-val";
+    
+    modalWrapperElement.appendChild(modalLine1Element);
+    modalWrapperElement.appendChild(modalButtonElement);
+
+    document.getElementById('btn-val').textContent = "Ajouter une photo";
+
+    document.getElementById("btn-val").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        removeModal1Gallery();
+        generateModal1Form();
+        
+
+    }); 
+}
+
+function removeModal1Gallery(){
+    console.log('remove view 1')
+    document.getElementById("modal-gallery-id").remove();
+    document.getElementById("modal-line-id").remove();
+    document.getElementById("btn-val").remove();
+
+}
+
+function generateModal1Form(){
+    console.log('create view 2');
+
+    document.getElementById("go-back-id").classList.remove("hidden");
+    document.getElementById("go-back-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        removeModal1Form();
+        generateModal1Gallery(projets);
+    }); 
+
+    document.getElementById('modal-title').textContent = "Ajout photo";
+
+    const modalFormElement = document.createElement("form");
+    modalFormElement.setAttribute("action", "#");
+    modalFormElement.setAttribute("method", "post");
+    modalFormElement.id = "modal-form-id";
+
+    const modalFileBoxElement = document.createElement("div");
+    modalFileBoxElement.classList.add("modal-file-box");
+    modalFileBoxElement.id = "modal-file-box-id";
+
+    const modalLabelTitreElement = document.createElement("label");
+    modalLabelTitreElement.setAttribute("for", "titre");
+    modalLabelTitreElement.innerHTML = "titre";
+   
+
+    const modalFormTitreElement = document.createElement("input");
+    modalFormTitreElement.setAttribute("type", "text");
+    modalFormTitreElement.setAttribute("name", "titre");
+    modalFormTitreElement.setAttribute("id", "titre");
+
+
+    const modalLabelCategorieElement = document.createElement("label");
+    modalLabelCategorieElement.setAttribute("for", "categorie");
+    modalLabelCategorieElement.innerHTML = "catégorie";
+
+    const modalSelectCategorieElement = document.createElement("select");
+    modalSelectCategorieElement.setAttribute("name", "titre");
+    modalSelectCategorieElement.setAttribute("id", "titre");
+
+    for (const category of categorySet.values()){
+        const optionElement = document.createElement("option");
+        optionElement.innerText = category;
+        optionElement.value = category;
+        modalSelectCategorieElement.appendChild(optionElement);
+
+    }
+
+
+    const modalSubmitElement = document.createElement("input");
+    modalSubmitElement.setAttribute("type", "submit");
+    modalSubmitElement.setAttribute("value", "Valider");
+    //modalSubmitElement.value ="Valider";
+
+    const modalWrapperElement = document.querySelector(".modal-wrapper");
+    modalWrapperElement.appendChild(modalFormElement);
+    modalFormElement.appendChild(modalFileBoxElement);
+    modalFormElement.appendChild(modalLabelTitreElement);
+    modalFormElement.appendChild(modalFormTitreElement);
+    modalFormElement.appendChild(modalLabelCategorieElement);
+    modalFormElement.appendChild(modalSelectCategorieElement);
+
+
+    modalFormElement.appendChild(modalSubmitElement);
+
+
+/*
+<form action="#" method="post">
+			<label for="name">Nom</label>
+			<input type="text" name="name" id="name">
+			<label for="email">Email</label>
+			<input type="email" name="email" id="email">
+			<label for="message">Message</label>
+			<textarea name="message" id="message" cols="30" rows="12"></textarea>
+			<input type="submit" value="Envoyer">
+		</form>*/
+
+
+
+}
+
+
+function removeModal1Form(){
+    console.log('remove view 2')
+    document.getElementById("modal-form-id").remove();
+}
+
+function generateModal1(){
+
+    const modal1Element = document.createElement("aside");
+    modal1Element.classList.add("modal");
+    modal1Element.id = "modale-1";
+
+    const modalWrapperElement = document.createElement("div");
+    modalWrapperElement.classList.add("modal-wrapper");
+    
+    const modalIconsElement = document.createElement("div");
+    modalIconsElement.classList.add("modal-icons");
+
+    const IconsWrapper1Element = document.createElement("div");
+    IconsWrapper1Element.classList.add("icon-wrapper");
+    IconsWrapper1Element.id = "close-id";
+
+    const modalCloseElement = document.createElement("div");
+    modalCloseElement.classList.add( "fa-lg", "fa-solid", "fa-xmark");
+    modalCloseElement.setAttribute("aria-hidden", "true");
+    
+
+    const IconsWrapper2Element = document.createElement("div");
+    IconsWrapper2Element.classList.add("icon-wrapper", "hidden");
+    IconsWrapper2Element.id = "go-back-id";
+
+    const modalGoBackElement = document.createElement("div");
+    modalGoBackElement.classList.add( "fa-lg", "fa-solid", "fa-arrow-left");
+    modalGoBackElement.setAttribute("aria-hidden", "true");
+
+    const modalTitleElement = document.createElement("h2");
+    modalTitleElement.id = "modal-title";
+    
+
+    const mainElement = document.querySelector("main");
+    mainElement.appendChild(modal1Element);
+    modal1Element.appendChild(modalWrapperElement);
+    modalWrapperElement.appendChild(modalIconsElement);
+    modalIconsElement.appendChild(IconsWrapper1Element);
+    IconsWrapper1Element.appendChild(modalCloseElement);
+    modalIconsElement.appendChild(IconsWrapper2Element);
+    IconsWrapper2Element.appendChild(modalGoBackElement);
+    modalWrapperElement.appendChild(modalTitleElement);
+
+    document.getElementById("close-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        document.getElementById("modale-1").remove();
+        
+        document.body.removeEventListener('click', closeModal);
+    });
+
+}
+
+/*	<aside id="modale-1" class="modal hidden">
+		<div class="modal-wrapper">
+                <div class="modal-icons">
+					<div class="icon-wrapper" id="close-id">
+						<div class="fa-lg fa-solid fa-xmark" aria-hidden="true"></div>
+					</div>
+					<div class="icon-wrapper hidden" id="go-back-id">
+						<span class="fa-lg fa-solid fa-arrow-left" aria-hidden="true"></span>
+					</div>					
+				</div>
+				<h2 id="modal-title">Galerie photo</h2>
+				<div class="modal-gallery" id="modal-gallery-id"></div>
+				<div class="modal-validation"></div>
+				<button class="modal-button" id="btn-val">Ajouter une photo</button>			
+		</div>
+	</aside>*/
+
+
+
+/************************************
+ * 
+ * closes Modal when clicking outside
+ * show/hides elements and updates texts
+ * 
+ ***********************************/
+
+function closeModal(event){
+    event.preventDefault();
+    //console.log(event.target.id);
+    if( event.target.id =="modale-1")
+    {
+       
+        document.getElementById("modale-1").remove();
+        
+        document.body.removeEventListener('click', closeModal);       
+        
+        
+     /*   
+        document.getElementById("modale-1").classList.add("hidden");
+        document.body.removeEventListener('click', closeModal);
+        document.getElementById("go-back-id").classList.add("hidden");
+        document.getElementById("modal-gallery-id").classList.remove("hidden");
+        document.getElementById("modal-form-id").classList.add("hidden");
+        document.getElementById('modal-title').textContent = "Galerie photo";
+        document.getElementById('btn-val').textContent = "Ajouter photo";*/
+    }
+};
+
+
+/************************************
+ * 
+ * removes project in backend API when clicking on dustbin
+ * show/hides elements and updates texts
+ * 
+ ***********************************/
+
+
+function removeProject(event){
+    //event.preventDefault();
+    //console.log(event.target);
+    const dustbin = event.target;
+    const projectName = dustbin.parentNode.id; // img_5
+    //console.log(projectName );
+    const projectId = projectName.slice(4); // removes first 4 characterss
+    //console.log("dernierCaractere "+projectId);
+    const token =  sessionStorage.getItem("token"); 
+    //console.log('token '+token); 
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+    };
+
+    fetch(`http://localhost:5678/api/works/${projectId}`, requestOptions)
+    .then(response => {
+
+        console.log('response');
+        console.log(response);
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            document.getElementById("modale-1").classList.remove("hidden");
+        }
+
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });
 
 }
 

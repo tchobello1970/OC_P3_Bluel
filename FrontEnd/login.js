@@ -42,8 +42,17 @@ btn_connection.addEventListener("click", (event) => {
                 // déclenche le catch error
                 throw new Error('Erreur lors de la requête');
             }
-            sessionStorage.setItem("token", response.json().token);
-            window.location.href = "index.html";
+            else
+            {
+                console.log('REPONSE');
+                console.log(response);
+                response.json().then(data => {
+                    console.log('DATA');
+                    console.log(data);
+                    sessionStorage.setItem("token", data.token);
+                    window.location.href = "index.html";
+                });
+            }
         })
         .catch(error => {
             console.error('Une erreur s\'est produite:', error);
