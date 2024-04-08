@@ -7,6 +7,50 @@ const projets = await reponse.json();
 const categorySet = new Set();
 
 
+
+
+
+/*****************************
+ * 
+ * generates page in both cases logged or not
+ * removes token in sesssionStorage in click on logout
+ * 
+ *******************************/
+
+
+// show/hide DOM elements if logged in or not
+function genererPage(){
+    console.log('générer page');
+    if( sessionStorage.getItem("token")){
+        document.getElementById("nav-login").classList.add("hidden");
+    }
+    else{
+        console.log('pas de token');
+        document.getElementById("editor-id").classList.add("hidden");
+        document.getElementById("nav-logout").classList.add("hidden");
+        document.getElementById("modify-id").classList.add("hidden");
+    }
+
+   // logout
+    document.getElementById("nav-logout").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        sessionStorage.removeItem("token");
+        window.location.href = "index.html";  // go back to main page in all cases
+    });
+
+    // modify
+    document.getElementById("modify-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        //document.getElementById("modale-1").classList.remove("hidden"); // display modal
+        generateModal1();
+        generateModal1Gallery(projets);
+        // add listener to body to close modal only when modal is visible
+        document.body.addEventListener('click', closeModal);
+    });
+}
+
+
+
 /***********************************
  * 
  * dynamic filters in index.html
@@ -78,7 +122,7 @@ function genererFiltres(projets){
  **********************************/
 
 function genererProjets(projets){
-    console.log('générerprojets');
+    console.log('générer projets');
     
 
     Object.values(projets).forEach( projet => {  
@@ -86,6 +130,7 @@ function genererProjets(projets){
         
         // creates main page element
         const ProjetElement = document.createElement("figure");
+        ProjetElement.id = "fig_img_"+projet.id;
           // img
         const imageElement = document.createElement("img");
         imageElement.src = projet.imageUrl; // adds API value
@@ -102,178 +147,7 @@ function genererProjets(projets){
 }
 
 
-/*****************************
- * 
- * generates page in both cases logged or not
- * removes token in sesssionStorage in click on logout
- * 
- *******************************/
 
-
-// show/hide DOM elements if logged in or not
-function genererPage(){
-    if( sessionStorage.getItem("token")){
-        document.getElementById("nav-login").classList.add("hidden");
-    }
-    else{
-        console.log('pas de token');
-        document.getElementById("editor-id").classList.add("hidden");
-        document.getElementById("nav-logout").classList.add("hidden");
-        document.getElementById("modify-id").classList.add("hidden");
-    }
-
-    // logout
-    document.getElementById("nav-logout").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        sessionStorage.removeItem("token");
-        window.location.href = "index.html";  // go back to main page in all cases
-    });
-
-    // modify
-    document.getElementById("modify-id").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        //document.getElementById("modale-1").classList.remove("hidden"); // display modal
-        generateModal1();
-        generateModal1Gallery(projets);
-        // add listener to body to close modal only when modal is visible
-        document.body.addEventListener('click', closeModal);
-    });
-}
-
-function generateModal1Gallery(projets) {
-
-    document.getElementById("go-back-id").classList.add("hidden");
-    
-    document.getElementById('modal-title').textContent = "Galerie photo";
-
-    const modalGalleryContainer = document.createElement("div");
-    modalGalleryContainer.classList.add("modal-gallery");
-    modalGalleryContainer.id = "modal-gallery-id";
-
-    const modalWrapperElement = document.querySelector(".modal-wrapper");
-    modalWrapperElement.appendChild(modalGalleryContainer);
-
-    Object.values(projets).forEach( projet => {
-           // creates modal page element
-           const modalFigureElement = document.createElement("figure");
-           modalFigureElement.classList.add("image-container");
-             // img
-           const modalImageElement = document.createElement("img");
-           modalImageElement.src = projet.imageUrl; // adds API value
-             // dustbin container
-           const modalDustbinElement = document.createElement("div");
-           modalDustbinElement.id = "img_"+projet.id; // updates id with API value
-           modalDustbinElement.classList.add("dustbin-container");
-             // dustbin img
-           const modalDustbinImg = document.createElement("span");
-           modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
-           modalDustbinImg.setAttribute("aria-hidden", "true");
-           modalDustbinImg.addEventListener('click', removeProject);
-    
-        // adds elements to the DOM
-           const modalGallery = document.querySelector(".modal-gallery");
-           modalGallery.appendChild(modalFigureElement);
-           modalFigureElement.appendChild(modalImageElement);
-           modalFigureElement.appendChild(modalDustbinElement);
-           modalDustbinElement.appendChild(modalDustbinImg);
-    });
-
-    const modalLine1Element = document.createElement("div");
-    modalLine1Element.classList.add("modal-line");
-    modalLine1Element.id = "modal-line-id";
-
-    const modalButtonElement = document.createElement("button");
-    modalButtonElement.classList.add("modal-button");
-    modalButtonElement.id = "btn-val";
-    
-    modalWrapperElement.appendChild(modalLine1Element);
-    modalWrapperElement.appendChild(modalButtonElement);
-
-    document.getElementById('btn-val').textContent = "Ajouter une photo";
-
-    document.getElementById("btn-val").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        removeModal1Gallery();
-        generateModal1Form();
-        
-
-    }); 
-}
-
-function removeModal1Gallery(){
-    console.log('remove view 1')
-    document.getElementById("modal-gallery-id").remove();
-    document.getElementById("modal-line-id").remove();
-    document.getElementById("btn-val").remove();
-
-}
-
-function generateModal1Form(){
-    console.log('create view 2');
-
-    document.getElementById("go-back-id").classList.remove("hidden");
-    document.getElementById("go-back-id").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
-        removeModal1Form();
-        generateModal1Gallery(projets);
-    }); 
-
-    document.getElementById('modal-title').textContent = "Ajout photo";
-
-    const modalFormElement = document.createElement("form");
-    modalFormElement.action = "#";
-    modalFormElement.method = "post";
-    modalFormElement.id = "modal-form-id";
-
-    const modalFileBoxElement = document.createElement("div");
-    modalFileBoxElement.classList.add("modal-file-box");
-    modalFileBoxElement.id = "modal-file-box-id";
-
-    const modalLabelTitreElement = document.createElement("label");
-    modalLabelTitreElement.for = "titre";
-    modalLabelTitreElement.innerHTML = "titre";
-   
-    const modalFormTitreElement = document.createElement("input");
-    modalFormTitreElement.type = "text";
-    modalFormTitreElement.name = "titre";
-    modalFormTitreElement.id = "titre";
-
-    const modalLabelCategorieElement = document.createElement("label");
-    modalLabelCategorieElement.for = "categorie";
-    modalLabelCategorieElement.innerHTML = "catégorie";
-
-    const modalSelectCategorieElement = document.createElement("select");
-    modalSelectCategorieElement.name = "titre";
-    modalSelectCategorieElement.id = "titre";
-
-    for (const category of categorySet.values()){
-        const optionElement = document.createElement("option");
-        optionElement.innerText = category;
-        optionElement.value = category;
-        modalSelectCategorieElement.appendChild(optionElement);
-    }
-
-    const modalSubmitElement = document.createElement("input");
-    modalSubmitElement.type = "submit";
-    modalSubmitElement.value ="Valider";
- 
-    const modalWrapperElement = document.querySelector(".modal-wrapper");
-    modalWrapperElement.appendChild(modalFormElement);
-    modalFormElement.appendChild(modalFileBoxElement);
-    modalFormElement.appendChild(modalLabelTitreElement);
-    modalFormElement.appendChild(modalFormTitreElement);
-    modalFormElement.appendChild(modalLabelCategorieElement);
-    modalFormElement.appendChild(modalSelectCategorieElement);
-
-    modalFormElement.appendChild(modalSubmitElement);
-
-}
-
-
-function removeModal1Form(){
-    console.log('remove view 2')
-    document.getElementById("modal-form-id").remove();
-}
 
 function generateModal1(){
 
@@ -324,8 +198,179 @@ function generateModal1(){
         
         document.body.removeEventListener('click', closeModal);
     });
+}
+
+
+
+function generateModal1Gallery(projets) {
+
+    document.getElementById("go-back-id").classList.add("hidden");
+    
+    document.getElementById('modal-title').textContent = "Galerie photo";
+
+    const modalGalleryContainer = document.createElement("div");
+    modalGalleryContainer.classList.add("modal-gallery");
+    modalGalleryContainer.id = "modal-gallery-id";
+
+    const modalWrapperElement = document.querySelector(".modal-wrapper");
+    modalWrapperElement.appendChild(modalGalleryContainer);
+
+    Object.values(projets).forEach( projet => {
+           // creates modal page element
+           const modalFigureElement = document.createElement("figure");
+           modalFigureElement.classList.add("image-container");
+           modalFigureElement.id = "fig_mod_img_"+projet.id;
+             // img
+           const modalImageElement = document.createElement("img");
+           modalImageElement.src = projet.imageUrl; // adds API value
+             // dustbin container
+           const modalDustbinElement = document.createElement("div");
+           modalDustbinElement.id = "img_"+projet.id; // updates id with API value
+           modalDustbinElement.classList.add("dustbin-container");
+             // dustbin img
+           const modalDustbinImg = document.createElement("span");
+           modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
+           modalDustbinImg.setAttribute("aria-hidden", "true");
+           modalDustbinImg.addEventListener('click', confirmRemoveProject);
+    
+        // adds elements to the DOM
+           const modalGallery = document.querySelector(".modal-gallery");
+           modalGallery.appendChild(modalFigureElement);
+           modalFigureElement.appendChild(modalImageElement);
+           modalFigureElement.appendChild(modalDustbinElement);
+           modalDustbinElement.appendChild(modalDustbinImg);
+    });
+
+    const modalLine1Element = document.createElement("div");
+    modalLine1Element.classList.add("modal-line");
+    modalLine1Element.id = "modal-line-id";
+
+    const modalButtonElement = document.createElement("button");
+    modalButtonElement.classList.add("modal-button");
+    modalButtonElement.id = "btn-val";
+    
+    modalWrapperElement.appendChild(modalLine1Element);
+    modalWrapperElement.appendChild(modalButtonElement);
+
+    document.getElementById('btn-val').textContent = "Ajouter une photo";
+
+    document.getElementById("btn-val").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        removeModal1Gallery();
+        generateModal1Form();
+    }); 
+}
+
+function removeModal1Gallery(){
+    console.log('remove view 1')
+    document.getElementById("modal-gallery-id").remove();
+    document.getElementById("modal-line-id").remove();
+    document.getElementById("btn-val").remove();
 
 }
+
+function generateModal1Form(){
+    console.log('create view 2');
+
+    document.getElementById("go-back-id").classList.remove("hidden");
+    document.getElementById("go-back-id").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+        removeModal1Form();
+        generateModal1Gallery(projets);
+    }); 
+
+    document.getElementById('modal-title').textContent = "Ajout photo";
+
+    const modalFormElement = document.createElement("form");
+    modalFormElement.action = "#";
+    modalFormElement.method = "post";
+    modalFormElement.id = "modal-form-id";
+
+    const modalFileBoxElement = document.createElement("div");
+    modalFileBoxElement.classList.add("modal-file-box");
+    modalFileBoxElement.id = "modal-file-box-id";
+
+    const modalFileBoxImgElement = document.createElement("img");
+    modalFileBoxImgElement.src = "/assets/icons/landscape.svg";
+    modalFileBoxImgElement.alt = "icone paysage";
+    modalFileBoxImgElement.classList.add("landscape-svg");
+
+    const modalFileBoxButtonElement = document.createElement("button");
+    modalFileBoxButtonElement.classList.add("modal-filebox-button");
+    modalFileBoxButtonElement.id = "btn-add";
+
+    const modalFileBoxTitreElement = document.createElement("p");
+    modalFileBoxTitreElement.classList.add("modal-filebox-p");
+    modalFileBoxTitreElement.innerHTML = "jpg, png : 4 mo max";
+    
+    modalFileBoxElement.appendChild(modalFileBoxImgElement);
+    modalFileBoxElement.appendChild(modalFileBoxButtonElement);
+    modalFileBoxElement.appendChild(modalFileBoxTitreElement);
+
+  
+
+
+    const modalLabelTitreElement = document.createElement("label");
+    modalLabelTitreElement.for = "titre";
+    modalLabelTitreElement.innerHTML = "titre";
+   
+    const modalFormTitreElement = document.createElement("input");
+    modalFormTitreElement.type = "text";
+    modalFormTitreElement.name = "titre";
+    modalFormTitreElement.id = "titre";
+
+    const modalLabelCategorieElement = document.createElement("label");
+    modalLabelCategorieElement.for = "categorie";
+    modalLabelCategorieElement.innerHTML = "catégorie";
+
+    const modalSelectCategorieElement = document.createElement("select");
+    modalSelectCategorieElement.name = "titre";
+    modalSelectCategorieElement.id = "titre";
+
+    for (const category of categorySet.values()){
+        const optionElement = document.createElement("option");
+        optionElement.innerText = category;
+        optionElement.value = category;
+        modalSelectCategorieElement.appendChild(optionElement);
+    }
+
+    const modalLine1Element = document.createElement("div");
+    modalLine1Element.classList.add("modal-line-form");
+    modalLine1Element.id = "modal-line-id";
+
+    const modalSubmitElement = document.createElement("input");
+    modalSubmitElement.type = "submit";
+    modalSubmitElement.value ="Valider";
+ 
+    const modalWrapperElement = document.querySelector(".modal-wrapper");
+    modalWrapperElement.appendChild(modalFormElement);
+ 
+    modalFormElement.appendChild(modalFileBoxElement);
+    modalFormElement.appendChild(modalLabelTitreElement);
+    modalFormElement.appendChild(modalFormTitreElement);
+    modalFormElement.appendChild(modalLabelCategorieElement);
+    modalFormElement.appendChild(modalSelectCategorieElement);
+    
+    modalFormElement.appendChild(modalLine1Element);
+
+    modalFormElement.appendChild(modalSubmitElement);
+
+    document.getElementById('btn-add').textContent = "+ Ajouter photo";
+
+    document.getElementById("btn-add").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche le comportement par défaut du lien
+
+    }); 
+
+}
+
+
+function removeModal1Form(){
+    console.log('remove view 2')
+    document.getElementById("modal-form-id").remove();
+}
+
+
 
 
 /************************************
@@ -336,10 +381,12 @@ function generateModal1(){
  ***********************************/
 
 function closeModal(event){
-    event.preventDefault();
-    //console.log(event.target.id);
+    //event.preventDefault();
+    console.log('Modal closing')
+    console.log(event.target.id);
     if( event.target.id == "modale-1" )
     {
+        console.log('Modal closed')
         document.getElementById("modale-1").remove();
         document.body.removeEventListener('click', closeModal);       
     }
@@ -354,12 +401,31 @@ function closeModal(event){
  ***********************************/
 
 
-function removeProject(event){
+function confirmRemoveProject(event){
     event.preventDefault();
-
     const dustbin = event.target;
     const projectName = dustbin.parentNode.id; // img_5
-    const projectId = projectName.slice(4); // removes first 4 characterss
+    const projectId = projectName.slice(4); // removes first 4 characters
+
+    // Afficher la boîte de dialogue de confirmation
+    let confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+      
+    // Vérifier si l'utilisateur a cliqué sur OK ou Annuler
+    if (confirmation) {
+      // L'utilisateur a cliqué sur OK
+      removeProject( projectId );
+    } 
+
+    
+}
+
+
+function removeProject(projectId){
+  
+
+    /*const dustbin = event.target;
+    const projectName = dustbin.parentNode.id; // img_5
+    const projectId = projectName.slice(4); // removes first 4 characterss*/
     
     const token =  sessionStorage.getItem("token"); 
     
@@ -380,6 +446,19 @@ function removeProject(event){
             // déclenche le catch error
             throw new Error('Erreur lors de la requête');
         }
+        else{
+            console.log('project removed');
+
+            document.getElementById("fig_img_"+projectId).remove();
+            document.getElementById("fig_mod_img_"+projectId).remove();
+
+    
+     
+
+
+
+            //sessionStorage.setItem("editor-mode", 1);
+        }
 
     })
     .catch(error => {
@@ -388,8 +467,11 @@ function removeProject(event){
 
 }
 
+//if( sessionStorage.getItem("editor-mode") !== 1)
+{
+    genererPage();
+}
 
-genererPage();
 genererFiltres(projets);
 genererProjets(projets);
 
