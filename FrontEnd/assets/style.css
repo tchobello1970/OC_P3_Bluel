@@ -449,6 +449,16 @@ input[type="submit"]{
 	align-items: center;
 }
 
+.modal-file-box-cont{
+	width: 100%;
+	height: 169px;
+	background-color: #E8F1F6;
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+	align-items: center;
+}
+
 .landscape-svg{
 	background-color:transparent;
     padding: 10px 0;
@@ -460,6 +470,18 @@ input[type="submit"]{
 	font-size: 10px;
 	font-weight: 400;
 	padding-top: 10px;
+}
+
+/*.modal-filebox-minipix{
+	width: 420px;
+	height: 169px;
+
+}*/
+
+.modal-filebox-minipix img{
+	width: 420px;
+	height: 169px;
+	object-fit: cover;
 }
 
 .modal-line-form {
