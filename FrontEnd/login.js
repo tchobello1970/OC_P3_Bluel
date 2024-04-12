@@ -52,49 +52,11 @@ btn_connection.addEventListener("click", (event) => {
         })
         .catch(error => {
             console.error('Une erreur s\'est produite:', error);
-            afficherErreur("Connexion non établie. Vérifiez l'email et le mot de passe...")
+            alert("Connexion non établie. Vérifiez l'email et le mot de passe...");
         });
     }
 
 });
-
-
-/*************************
- * 
- * removes error message when clicking on email or password field
- * 
- ************************/
-const field_email = document.getElementById("email");
-field_email.addEventListener("click", (event) => {
-    event.preventDefault();
-    supprimerErreur();
-});
-
-const field_password = document.getElementById("password");
-field_password.addEventListener("click", (event) => {
-    event.preventDefault();
-    supprimerErreur();
-});
-
-
-function supprimerErreur(){
-    const erreurElement = document.querySelector("#erreur-id");
-    if (erreurElement) {
-        // Supprimer l'élément du DOM
-        erreurElement.remove();
-    }
-}
-
-
-function afficherErreur(messsage){
-    console.log('afficheErreur');
-    const mainElement = document.querySelector("main");
-    const erreurElement = document.createElement("h2");
-    erreurElement.id = "erreur-id";
-    erreurElement.innerText = messsage;
-    mainElement.appendChild(erreurElement);
-
-}
 
 
 /********************************
@@ -105,7 +67,8 @@ function afficherErreur(messsage){
 function verifierChamp(champ) {
     // Si le champ est vide, on lance une exception
     if (champ.value === "") {
-        afficherErreur(`Le champ ${champ.id} est vide`);
+        //afficherErreur(`Le champ ${champ.id} est vide`);
+        alert(`Le champ ${champ.id} est vide`);
         return false;
     }
 
@@ -114,7 +77,8 @@ function verifierChamp(champ) {
         let regex_email = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\.[a-z0-9._-]+");
         let resultat = regex_email.test(champ.value);
         if( resultat === false){
-            afficherErreur(`Le champ ${champ.id} n'est pas valide`);
+            //afficherErreur(`Le champ ${champ.id} n'est pas valide`);
+            alert(`Le champ ${champ.id} n'est pas valide`);
             return false;
         }
     }

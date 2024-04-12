@@ -164,8 +164,8 @@ function genererProjets(projets){
 function generateModal1(){
 
     const modal1Element = document.createElement("aside");
-    modal1Element.classList.add("modal");
     modal1Element.id = "modale-1";
+    modal1Element.classList.add("modal");
 
     const modalWrapperElement = document.createElement("div");
     modalWrapperElement.classList.add("modal-wrapper");
@@ -174,8 +174,8 @@ function generateModal1(){
     modalIconsElement.classList.add("modal-icons");
 
     const IconsWrapper1Element = document.createElement("div");
-    IconsWrapper1Element.classList.add("icon-wrapper");
     IconsWrapper1Element.id = "close-id";
+    IconsWrapper1Element.classList.add("icon-wrapper");
 
     const modalCloseElement = document.createElement("div");
     modalCloseElement.classList.add( "fa-lg", "fa-solid", "fa-xmark");
@@ -183,8 +183,8 @@ function generateModal1(){
     
 
     const IconsWrapper2Element = document.createElement("div");
-    IconsWrapper2Element.classList.add("icon-wrapper", "hidden");
     IconsWrapper2Element.id = "go-back-id";
+    IconsWrapper2Element.classList.add("icon-wrapper", "hidden");
 
     const modalGoBackElement = document.createElement("div");
     modalGoBackElement.classList.add( "fa-lg", "fa-solid", "fa-arrow-left");
@@ -258,8 +258,8 @@ function generateModal1Gallery() {
     document.getElementById('modal-title').textContent = "Galerie photo";
 
     const modalGalleryContainer = document.createElement("div");
-    modalGalleryContainer.classList.add("modal-gallery");
     modalGalleryContainer.id = "modal-gallery-id";
+    modalGalleryContainer.classList.add("modal-gallery");
 
     const modalWrapperElement = document.querySelector(".modal-wrapper");
     modalWrapperElement.appendChild(modalGalleryContainer);
@@ -268,8 +268,8 @@ function generateModal1Gallery() {
     Object.values(projets).forEach( projet => {
            // creates modal page element
            const modalFigureElement = document.createElement("figure");
-           modalFigureElement.classList.add("image-container");
            modalFigureElement.id = "fig_mod_img_"+projet.id;
+           modalFigureElement.classList.add("image-container");
              // img
            const modalImageElement = document.createElement("img");
            modalImageElement.src = projet.imageUrl; // adds API value
@@ -281,7 +281,6 @@ function generateModal1Gallery() {
            const modalDustbinImg = document.createElement("span");
            modalDustbinImg.classList.add( "fa-sm","fa-regular","fa-trash-can", "dustbin");
            modalDustbinImg.setAttribute("aria-hidden", "true");
-           modalDustbinImg.addEventListener('click', confirmRemoveProject);
     
         // adds elements to the DOM
            const modalGallery = document.querySelector(".modal-gallery");
@@ -289,28 +288,30 @@ function generateModal1Gallery() {
            modalFigureElement.appendChild(modalImageElement);
            modalFigureElement.appendChild(modalDustbinElement);
            modalDustbinElement.appendChild(modalDustbinImg);
+           
+           modalDustbinImg.addEventListener('click', confirmRemoveProject);
     });
 
     const modalLine1Element = document.createElement("div");
-    modalLine1Element.classList.add("modal-line");
     modalLine1Element.id = "modal-line-id";
+    modalLine1Element.classList.add("modal-line");
 
     const modalButtonElement = document.createElement("button");
-    modalButtonElement.classList.add("modal-button");
     modalButtonElement.id = "btn-val";
-    
+    modalButtonElement.textContent = "Ajouter une photo";
+    modalButtonElement.classList.add("modal-button");    
 
     modalWrapperElement.appendChild(modalLine1Element);
     modalWrapperElement.appendChild(modalButtonElement);
 
-    document.getElementById('btn-val').textContent = "Ajouter une photo";
-
+    // switch to view 2 (removes the gallery and shows the form)
     document.getElementById("btn-val").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
+        event.preventDefault();
         removeModal1Gallery();
         generateModal1Form();
     }); 
 }
+
 
 function removeModal1Gallery(){
     console.log('remove view 1')
@@ -322,16 +323,12 @@ function removeModal1Gallery(){
 
 
 
-
-
-
-
 function generateModal1Form(){
     console.log('create view 2');
-
     document.getElementById("go-back-id").classList.remove("hidden");
+
     document.getElementById("go-back-id").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
+        event.preventDefault();
         removeModal1Form();
         generateModal1Gallery();
     }); 
@@ -340,25 +337,25 @@ function generateModal1Form(){
 
 
     const modalFileBoxElement = document.createElement("div");
-    modalFileBoxElement.classList.add("modal-file-box");
     modalFileBoxElement.id = "modal-file-box-id";
+    modalFileBoxElement.classList.add("modal-file-box");
 
     const modalFileBoxContElement = document.createElement("div");
-    modalFileBoxContElement.classList.add("modal-file-box-cont");
     modalFileBoxContElement.id = "modal-file-box-cont-id";
+    modalFileBoxContElement.classList.add("modal-file-box-cont");
 
     const modalFileBoxImgElement = document.createElement("img");
+    modalFileBoxImgElement.classList.add("landscape-svg");
     modalFileBoxImgElement.src = "/assets/icons/landscape.svg";
     modalFileBoxImgElement.alt = "icone paysage";
-    modalFileBoxImgElement.classList.add("landscape-svg");
 
     const modalFileBoxButtonElement = document.createElement("button");
-    modalFileBoxButtonElement.classList.add("modal-filebox-button");
     modalFileBoxButtonElement.id = "btn-add";
+    modalFileBoxButtonElement.classList.add("modal-filebox-button");    
 
     const modalFileBoxTitreElement = document.createElement("p");
-    modalFileBoxTitreElement.classList.add("modal-filebox-p");
     modalFileBoxTitreElement.innerHTML = "jpg, png : 4 mo max";
+    modalFileBoxTitreElement.classList.add("modal-filebox-p");
 
     const modalFileBoxMinipixElement = document.createElement("div");
     modalFileBoxMinipixElement.id = "imageContainer";
@@ -374,16 +371,21 @@ function generateModal1Form(){
 
   
     const modalFormElement = document.createElement("form");
-    modalFormElement.action = "";
-    modalFormElement.method = "post";
-    modalFormElement.id = "modal-form-id";
-
-
-    const modalFormInputImgElement = document.createElement("input");
-    modalFormInputImgElement.type="file";
-    modalFormInputImgElement.name="file";
-    modalFormInputImgElement.id="imageInput";
-    modalFormInputImgElement.accept=".png, .jpg";
+    Object.assign(modalFormElement, {
+        //action: '',
+        method: 'post',
+        id: 'modal-form-id'
+    });
+    
+   // inupt file is hidden
+    
+    const modalFormInputImgElement = document.createElement('input');
+    Object.assign(modalFormInputImgElement, {
+        type: 'file',
+        name: 'image',
+        id: 'imageInput',
+        accept: '.png, .jpg'
+    });
     modalFormInputImgElement.classList.add("hidden");
 
     const modalLabelTitreElement = document.createElement("label");
@@ -391,16 +393,18 @@ function generateModal1Form(){
     modalLabelTitreElement.innerHTML = "titre";
    
     const modalFormTitreElement = document.createElement("input");
-    modalFormTitreElement.type = "text";
-    modalFormTitreElement.name = "titre";
-    modalFormTitreElement.id = "titre";
+    Object.assign(modalFormTitreElement, {
+        type: 'text',
+        name: 'title',
+        id: 'titre'
+    });
 
     const modalLabelCategorieElement = document.createElement("label");
     modalLabelCategorieElement.for = "categorie";
     modalLabelCategorieElement.innerHTML = "catégorie";
 
     const modalSelectCategorieElement = document.createElement("select");
-    modalSelectCategorieElement.name = "categorie";
+    modalSelectCategorieElement.name = "category";
     modalSelectCategorieElement.id = "categorie";
     let i = 1;
     for (const category of categorySet.values()){
@@ -413,14 +417,13 @@ function generateModal1Form(){
 
     console.log('liste des catégories FETCH');
     Object.values( categories).forEach( category => {
-
             console.log(category);   
     });
 
 
     const modalLine1Element = document.createElement("div");
-    modalLine1Element.classList.add("modal-line-form");
     modalLine1Element.id = "modal-line-id";
+    modalLine1Element.classList.add("modal-line-form");
 
     const modalSubmitElement = document.createElement("input");
     modalSubmitElement.type = "submit";
@@ -440,13 +443,15 @@ function generateModal1Form(){
     modalFormElement.appendChild(modalLine1Element);
     modalFormElement.appendChild(modalSubmitElement);
 
+    document.getElementById('btn-add').textContent = "+ Ajouter photo";
+
 /********
  * 
  *   load image in fileBox
  * 
  * 
  ********/
-    document.getElementById('btn-add').textContent = "+ Ajouter photo";
+    
     document.getElementById('btn-add').addEventListener('click', function(event) {
         event.preventDefault(); 
         document.getElementById('imageInput').click();
@@ -461,9 +466,13 @@ function generateModal1Form(){
         if (file) {
             console.log('file_name');
             console.log(file.name);
-          const reader = new FileReader();
+            console.log('file all');
+            console.log(file);
           
-          reader.onload = function(event) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+          
+            reader.onload = function(event) {
             const imgElement = document.createElement('img');
             imgElement.src = event.target.result;
             
@@ -473,20 +482,27 @@ function generateModal1Form(){
             };
           };
           
-          reader.readAsDataURL(file);
+          //reader.readAsDataURL(file);
           console.log('FileReader');
           console.log(reader);
         }
     });
 
 
+ /********
+ * 
+ *   submit Add Project
+ * 
+ * 
+ ********/
+
     document.getElementById('modal-form-id').addEventListener('submit', function(event) {
         event.preventDefault(); // Empêcher le formulaire de se soumettre par défaut
         
 
-        //create formData with 3 values to be sent
         const formData = new FormData(event.target);
-
+        console.log('formData 1');
+        console.log(formData);
 
         const image_container = document.getElementById('imageContainer');
         if( image_container.childNodes.length === 0) {
@@ -496,28 +512,35 @@ function generateModal1Form(){
         else
         {
             console.log('files0000000');
-            const imageInput = document.getElementById('imageInput');
-            console.log(imageInput.files[0])
+            /*const imageInput = document.getElementById('imageInput');
+            console.log(imageInput)
+            const project_file = document.getElementById('imageInput').files[0];
+            console.log(project_file);*/
+
+            const project_file = image_container.firstElementChild;
+
+            //console.log(project_file.src);
+
             // update file field with file name extracted from the files array
-            formData.set("file", document.getElementById('imageInput').files[0].name);
+            //formData.set("image", "@"+project_file.name+";type="+project_file.type);
+            
+            //formData.set("image", 'string($binary)' + project_file);
+            formData.set("image", project_file.src);
         }
     
 
-        if( formData.get("titre") === "" )
+        if( formData.get("title") === "" )
         {
             alert("il n'y a pas de titre !");
             return;
         }
 
-        let photo = formData.get("file");
-        console.log( "photo");
+        let photo = formData.get("image");
+        console.log( "image");
         console.log( photo);
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-          }
-
-      });
+        addNewProject(formData);
+    });
 }
 
 
@@ -526,6 +549,7 @@ function generateModal1Form(){
 
 function removeModal1Form(){
     console.log('remove view 2')
+    document.getElementById("modal-file-box-id").remove();
     document.getElementById("modal-form-id").remove();
     //TODO remove all eventListeners
 }
@@ -550,22 +574,14 @@ function confirmRemoveProject(event){
     const projectName = dustbin.parentNode.id; // img_5
     const projectId = projectName.slice(4); // removes first 4 characters
 
-    // Afficher la boîte de dialogue de confirmation
     let confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
-      
-    // Vérifier si l'utilisateur a cliqué sur OK ou Annuler
     if (confirmation) {
-      // L'utilisateur a cliqué sur OK
-      removeProject( projectId );
+        removeProject( projectId );
     } 
 }
 
 
 function removeProject(projectId){
-  
-
-
-
     const token =  sessionStorage.getItem("token"); 
     
     const requestOptions = {
@@ -596,6 +612,52 @@ function removeProject(projectId){
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
+
+}
+
+
+function addNewProject(formData){
+    const token =  sessionStorage.getItem("token"); 
+
+    console.log("FFFORMDATA");
+    console.log(formData);
+    
+  
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+        },
+        body:formData
+    };
+
+    console.log( "requestOptions");
+    console.log( requestOptions);
+
+
+    fetch(`http://localhost:5678/api/works/`, requestOptions)
+    .then(response => {
+
+        console.log('response');
+        //console.log(response.json());
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            console.log('project '+formData.image+ ' added');
+
+            //document.getElementById("fig_img_"+projectId).remove();
+            //document.getElementById("fig_mod_img_"+projectId).remove();
+        }
+
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });
+
 
 }
 
