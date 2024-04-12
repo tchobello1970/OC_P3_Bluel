@@ -29,6 +29,7 @@ function genererPage(){
 
     //Elements hidden if logged or not
     if( sessionStorage.getItem("token")){
+        //console.log('token : '+sessionStorage.getItem("token"))
         document.getElementById("nav-login").classList.add("hidden");
     }
     else{
@@ -214,7 +215,7 @@ function generateModal1(){
 
     // add listener to close modal when clicking on X upper right
     document.getElementById("close-id").addEventListener("click", function(event) {
-        event.preventDefault();
+        //event.preventDefault();
         document.getElementById("modale-1").remove();
         
         // remove useless listener on body
@@ -239,7 +240,7 @@ function closeModal(event){
         document.getElementById("modale-1").remove();
     //    document.getElementById("close-id").removeEventListener('click', closeModal);
     //    document.getElementById("go-back-id").removeEventListener('click', closeModal);
-        document.body.removeEventListener('click', closeModal);       
+        document.body.removeEventListener('click', closeModal);   
     }
 };
 
@@ -252,7 +253,7 @@ function closeModal(event){
 
 
 function generateModal1Gallery() {
-
+    console.log('create view 1')
     document.getElementById("go-back-id").classList.add("hidden");
     
     document.getElementById('modal-title').textContent = "Galerie photo";
@@ -468,12 +469,14 @@ function generateModal1Form(){
             console.log(file.name);
             console.log('file all');
             console.log(file);
+            console.log('file path');
+            console.log(file.path);
           
             const reader = new FileReader();
-            reader.readAsDataURL(file);
           
             reader.onload = function(event) {
             const imgElement = document.createElement('img');
+            //les données binaires de l'image
             imgElement.src = event.target.result;
             
             imgElement.onload = function() {
@@ -482,7 +485,7 @@ function generateModal1Form(){
             };
           };
           
-          //reader.readAsDataURL(file);
+          reader.readAsDataURL(file);
           console.log('FileReader');
           console.log(reader);
         }
@@ -501,8 +504,11 @@ function generateModal1Form(){
         
 
         const formData = new FormData(event.target);
+
         console.log('formData 1');
-        console.log(formData);
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
 
         const image_container = document.getElementById('imageContainer');
         if( image_container.childNodes.length === 0) {
@@ -512,20 +518,31 @@ function generateModal1Form(){
         else
         {
             console.log('files0000000');
-            /*const imageInput = document.getElementById('imageInput');
+            const imageInput = document.getElementById('imageInput');
             console.log(imageInput)
             const project_file = document.getElementById('imageInput').files[0];
-            console.log(project_file);*/
+            console.log(project_file);
 
-            const project_file = image_container.firstElementChild;
+            
 
-            //console.log(project_file.src);
+            const project_file2 = image_container.firstElementChild;
+
+            console.log(project_file2);
 
             // update file field with file name extracted from the files array
             //formData.set("image", "@"+project_file.name+";type="+project_file.type);
             
             //formData.set("image", 'string($binary)' + project_file);
-            formData.set("image", project_file.src);
+            formData.set("image", project_file2.src);
+            //formData.set("image", `assets/images/${imageInput.files[0].name}`);
+            //formData.append("imageUrl", `assets/images/${imageInput.files[0].name}`);
+            //formData.set("image", '@malt Juniper mini.jpg;type=image/jpeg');
+
+        }
+
+        console.log('formData 2');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
         }
     
 
@@ -535,14 +552,13 @@ function generateModal1Form(){
             return;
         }
 
-        let photo = formData.get("image");
+    /*    let photo = formData.get("image");
         console.log( "image");
-        console.log( photo);
+        console.log( photo);*/
 
         addNewProject(formData);
     });
 }
-
 
 
 
@@ -602,7 +618,7 @@ function removeProject(projectId){
             throw new Error('Erreur lors de la requête');
         }
         else{
-            console.log('project removed');
+            console.log('project ' + projectId + ' removed');
 
             document.getElementById("fig_img_"+projectId).remove();
             document.getElementById("fig_mod_img_"+projectId).remove();
@@ -627,6 +643,7 @@ function addNewProject(formData){
         method: 'POST',
         headers: {
             accept: "application/json",
+            //accept: "*/*",
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
         },
