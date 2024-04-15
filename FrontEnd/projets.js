@@ -358,9 +358,9 @@ function generateModal1Form(){
     modalFileBoxTitreElement.innerHTML = "jpg, png : 4 mo max";
     modalFileBoxTitreElement.classList.add("modal-filebox-p");
 
-    const modalFileBoxMinipixElement = document.createElement("div");
+/*    const modalFileBoxMinipixElement = document.createElement("div");
     modalFileBoxMinipixElement.id = "imageContainer";
-    modalFileBoxMinipixElement.classList.add("modal-filebox-minipix");
+    modalFileBoxMinipixElement.classList.add("modal-filebox-minipix");*/
 
     
     
@@ -368,7 +368,7 @@ function generateModal1Form(){
     modalFileBoxContElement.appendChild(modalFileBoxImgElement);
     modalFileBoxContElement.appendChild(modalFileBoxButtonElement);
     modalFileBoxContElement.appendChild(modalFileBoxTitreElement);
-    modalFileBoxElement.appendChild(modalFileBoxMinipixElement);
+    //modalFileBoxElement.appendChild(modalFileBoxMinipixElement);
 
   
     const modalFormElement = document.createElement("form");
@@ -385,7 +385,8 @@ function generateModal1Form(){
         type: 'file',
         name: 'image',
         id: 'imageInput',
-        accept: '.png, .jpg'
+        accept: '.png, .jpg',
+        //required: true
     });
     modalFormInputImgElement.classList.add("hidden");
 
@@ -397,8 +398,10 @@ function generateModal1Form(){
     Object.assign(modalFormTitreElement, {
         type: 'text',
         name: 'title',
-        id: 'titre'
+        id: 'titre',
+        //required: true
     });
+    
 
     const modalLabelCategorieElement = document.createElement("label");
     modalLabelCategorieElement.for = "categorie";
@@ -407,6 +410,14 @@ function generateModal1Form(){
     const modalSelectCategorieElement = document.createElement("select");
     modalSelectCategorieElement.name = "category";
     modalSelectCategorieElement.id = "categorie";
+    //modalSelectCategorieElement.required = true;
+    
+    const optionElement = document.createElement("option");
+    optionElement.innerText = "";
+    optionElement.value = 0;
+    
+    modalSelectCategorieElement.appendChild(optionElement);
+
     let i = 1;
     for (const category of categorySet.values()){
         const optionElement = document.createElement("option");
@@ -416,10 +427,10 @@ function generateModal1Form(){
         i ++;
     }
 
-    console.log('liste des catégories FETCH');
+    /*console.log('liste des catégories FETCH');
     Object.values( categories).forEach( category => {
             console.log(category);   
-    });
+    });*/
 
 
     const modalLine1Element = document.createElement("div");
@@ -428,7 +439,10 @@ function generateModal1Form(){
 
     const modalSubmitElement = document.createElement("input");
     modalSubmitElement.type = "submit";
+    modalSubmitElement.id = "btn-validate";
     modalSubmitElement.value ="Valider";
+    modalSubmitElement.disabled =true;
+    
  
     const modalWrapperElement = document.querySelector(".modal-wrapper");
 
@@ -445,6 +459,21 @@ function generateModal1Form(){
     modalFormElement.appendChild(modalSubmitElement);
 
     document.getElementById('btn-add').textContent = "+ Ajouter photo";
+    
+
+    function checkFormValues(){
+        if( document.getElementById('titre').value.trim() !== "" 
+        && document.getElementById('categorie').value > 0 
+        && document.getElementById('modal-file-box-cont-id').classList.contains("hidden") )
+        {
+            console.log("3 champs valides");
+            document.getElementById('btn-validate').disabled = false;
+            document.getElementById('btn-validate').style.backgroundColor ="#1D6154";
+        }
+            
+        
+
+    }
 
 /********
  * 
@@ -456,39 +485,50 @@ function generateModal1Form(){
     document.getElementById('btn-add').addEventListener('click', function(event) {
         event.preventDefault(); 
         document.getElementById('imageInput').click();
+        
       });
       
     document.getElementById('imageInput').addEventListener('change', function(event) {
         event.preventDefault();
-        console.log(event.target);
-        console.log(event.target.files);
         const file = event.target.files[0];
         
         if (file) {
-            console.log('file_name');
-            console.log(file.name);
-            console.log('file all');
+            if(file.size > 4000000)
+            {
+                alert('file too big');
+                return;
+            }
+
+            console.log('file length');
             console.log(file);
-            console.log('file path');
-            console.log(file.path);
-          
+
             const reader = new FileReader();
+            reader.readAsDataURL(file);
           
             reader.onload = function(event) {
             const imgElement = document.createElement('img');
             //les données binaires de l'image
             imgElement.src = event.target.result;
+            imgElement.classList.add("modal-filebox-minipix");
             
             imgElement.onload = function() {
-              document.getElementById('imageContainer').appendChild(imgElement);
-              document.getElementById('modal-file-box-cont-id').classList.add("hidden");
+                document.getElementById('modal-file-box-id').appendChild(imgElement);
+                document.getElementById('modal-file-box-cont-id').classList.add("hidden");
+                checkFormValues();
             };
           };
-          
-          reader.readAsDataURL(file);
-          console.log('FileReader');
-          console.log(reader);
         }
+    });
+
+
+    document.getElementById('titre').addEventListener('change', function(event) {
+        event.preventDefault();
+        checkFormValues();
+    });
+
+    document.getElementById('categorie').addEventListener('change', function(event) {
+        event.preventDefault();
+        checkFormValues();
     });
 
 
@@ -502,63 +542,23 @@ function generateModal1Form(){
     document.getElementById('modal-form-id').addEventListener('submit', function(event) {
         event.preventDefault(); // Empêcher le formulaire de se soumettre par défaut
         
-
         const formData = new FormData(event.target);
 
-        console.log('formData 1');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
-        const image_container = document.getElementById('imageContainer');
-        if( image_container.childNodes.length === 0) {
-            alert("il n'y a pas d'image !");
-            return;
-        }
-        else
-        {
-            console.log('files0000000');
-            const imageInput = document.getElementById('imageInput');
-            console.log(imageInput)
-            const project_file = document.getElementById('imageInput').files[0];
-            console.log(project_file);
-
-            
-
-            const project_file2 = image_container.firstElementChild;
-
-            console.log(project_file2);
-
-            // update file field with file name extracted from the files array
-            //formData.set("image", "@"+project_file.name+";type="+project_file.type);
-            
-            //formData.set("image", 'string($binary)' + project_file);
-            formData.set("image", project_file2.src);
-            //formData.set("image", `assets/images/${imageInput.files[0].name}`);
-            //formData.append("imageUrl", `assets/images/${imageInput.files[0].name}`);
-            //formData.set("image", '@malt Juniper mini.jpg;type=image/jpeg');
-
-        }
+        
+        const project_file = document.getElementById("imageInput").files[0];
+        formData.set("image", project_file);
+        formData.set("title", formData.get("title").trim());
 
         console.log('formData 2');
         for (let pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
-    
-
-        if( formData.get("title") === "" )
-        {
-            alert("il n'y a pas de titre !");
-            return;
-        }
-
-    /*    let photo = formData.get("image");
-        console.log( "image");
-        console.log( photo);*/
 
         addNewProject(formData);
+        document.getElementById("go-back-id").click();
     });
 }
+
 
 
 
@@ -569,10 +569,6 @@ function removeModal1Form(){
     document.getElementById("modal-form-id").remove();
     //TODO remove all eventListeners
 }
-
-
-
-
 
 
 
@@ -610,9 +606,6 @@ function removeProject(projectId){
 
     fetch(`http://localhost:5678/api/works/${projectId}`, requestOptions)
     .then(response => {
-
-        console.log('response');
-        console.log(response);
         if (!response.ok) {
             // déclenche le catch error
             throw new Error('Erreur lors de la requête');
@@ -623,48 +616,35 @@ function removeProject(projectId){
             document.getElementById("fig_img_"+projectId).remove();
             document.getElementById("fig_mod_img_"+projectId).remove();
         }
-
     })
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
-
 }
 
 
 function addNewProject(formData){
     const token =  sessionStorage.getItem("token"); 
-
-    console.log("FFFORMDATA");
-    console.log(formData);
-    
-  
+   
     const requestOptions = {
         method: 'POST',
         headers: {
             accept: "application/json",
-            //accept: "*/*",
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+        //    "Content-Type": "multipart/form-data"
         },
         body:formData
     };
 
-    console.log( "requestOptions");
-    console.log( requestOptions);
-
-
     fetch(`http://localhost:5678/api/works/`, requestOptions)
     .then(response => {
 
-        console.log('response');
-        //console.log(response.json());
         if (!response.ok) {
             // déclenche le catch error
             throw new Error('Erreur lors de la requête');
         }
         else{
-            console.log('project '+formData.image+ ' added');
+            console.log('project '+formData.title+ ' added');
 
             //document.getElementById("fig_img_"+projectId).remove();
             //document.getElementById("fig_mod_img_"+projectId).remove();
@@ -674,8 +654,6 @@ function addNewProject(formData){
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
-
-
 }
 
 genererPage();
