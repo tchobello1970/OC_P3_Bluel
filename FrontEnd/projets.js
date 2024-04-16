@@ -2,7 +2,7 @@
 
 // Récupération des projets depuis le fichier JSON
 const reponse = await fetch('http://localhost:5678/api/works');
-const projets = await reponse.json();
+let projets = await reponse.json();
 // Récupération des catégories depuis le fichier JSON
 const reponse_cat = await fetch('http://localhost:5678/api/categories');
 const categories = await reponse_cat.json();
@@ -131,6 +131,8 @@ function ajouteListenerFiltre(filterElement){
 
 function genererProjets(projets){
     console.log('générer projets');
+
+    console.log(projets);
  
     Object.values(projets).forEach( projet => {  
         //console.log(projet);   
@@ -264,6 +266,9 @@ function generateModal1Gallery() {
 
     const modalWrapperElement = document.querySelector(".modal-wrapper");
     modalWrapperElement.appendChild(modalGalleryContainer);
+
+    console.log('projets');
+    console.log(projets);
     
 
     Object.values(projets).forEach( projet => {
@@ -470,9 +475,6 @@ function generateModal1Form(){
             document.getElementById('btn-validate').disabled = false;
             document.getElementById('btn-validate').style.backgroundColor ="#1D6154";
         }
-            
-        
-
     }
 
 /********
@@ -555,7 +557,7 @@ function generateModal1Form(){
         }
 
         addNewProject(formData);
-        document.getElementById("go-back-id").click();
+
     });
 }
 
@@ -613,13 +615,43 @@ function removeProject(projectId){
         else{
             console.log('project ' + projectId + ' removed');
 
-            document.getElementById("fig_img_"+projectId).remove();
+            //document.getElementById("fig_img_"+projectId).remove();
             document.getElementById("fig_mod_img_"+projectId).remove();
+
+               //window.location.href = "index.html";
         }
     })
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
+
+    fetch(`http://localhost:5678/api/works/`)
+    .then(response => {
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            
+            response.json().then(data => {
+            console.log('data');
+            console.log(data);
+            projets = data;
+            // all children are removed
+            document.getElementById("gallery-id").innerHTML= "";
+            genererProjets(data);
+            
+
+            });
+
+            //window.location.href = "index.html";
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });
+
+
 }
 
 
@@ -644,16 +676,65 @@ function addNewProject(formData){
             throw new Error('Erreur lors de la requête');
         }
         else{
-            console.log('project '+formData.title+ ' added');
+            console.log('project '+formData.get("title").trim()+ ' added');
 
-            //document.getElementById("fig_img_"+projectId).remove();
-            //document.getElementById("fig_mod_img_"+projectId).remove();
+            fetch(`http://localhost:5678/api/works/`)
+            .then(response => {
+                if (!response.ok) {
+                    // déclenche le catch error
+                    throw new Error('Erreur lors de la requête');
+                }
+                else{
+                    
+                    response.json().then(data => {
+                    console.log('data 2 la revanche');
+                    console.log(data);
+                    projets = data;
+                    // all children are removed
+                    document.getElementById("gallery-id").innerHTML= "";
+                    genererProjets(data);
+                    document.getElementById('go-back-id').click();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Une erreur s\'est produite:', error);
+            });
+
+
         }
 
     })
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
+
+
+   /* fetch(`http://localhost:5678/api/works/`)
+    .then(response => {
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            
+            response.json().then(data => {
+            console.log('data 2 la revanche');
+            console.log(data);
+            projets = data;
+            // all children are removed
+            document.getElementById("gallery-id").innerHTML= "";
+            genererProjets(data);
+
+            });
+
+            //window.location.href = "index.html";
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });*/
+
 }
 
 genererPage();
