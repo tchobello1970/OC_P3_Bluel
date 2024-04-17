@@ -1,12 +1,8 @@
-
 console.log('login activation');
-
-
 const btnConnection = document.getElementById("btn_connection")
 
 btn_connection.addEventListener("click", (event) => {
     event.preventDefault(); // to prevent page reloading
-
 
 /* check fields */
     if( verifierChamp(email) && verifierChamp(password)) {
@@ -44,6 +40,8 @@ btn_connection.addEventListener("click", (event) => {
             }
             else
             {
+                // token i saved in a session storage
+                // go back to index page
                 response.json().then(data => {
                     sessionStorage.setItem("token", data.token);
                     window.location.href = "index.html";
@@ -66,7 +64,7 @@ btn_connection.addEventListener("click", (event) => {
 
 function verifierChamp(champ) {
     // Si le champ est vide, on lance une exception
-    if (champ.value === "") {
+    if (champ.value.trim() === "") {
         //afficherErreur(`Le champ ${champ.id} est vide`);
         alert(`Le champ ${champ.id} est vide`);
         return false;

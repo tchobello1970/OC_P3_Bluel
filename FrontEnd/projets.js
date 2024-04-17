@@ -363,17 +363,11 @@ function generateModal1Form(){
     modalFileBoxTitreElement.innerHTML = "jpg, png : 4 mo max";
     modalFileBoxTitreElement.classList.add("modal-filebox-p");
 
-/*    const modalFileBoxMinipixElement = document.createElement("div");
-    modalFileBoxMinipixElement.id = "imageContainer";
-    modalFileBoxMinipixElement.classList.add("modal-filebox-minipix");*/
-
-    
-    
     modalFileBoxElement.appendChild(modalFileBoxContElement);
     modalFileBoxContElement.appendChild(modalFileBoxImgElement);
     modalFileBoxContElement.appendChild(modalFileBoxButtonElement);
     modalFileBoxContElement.appendChild(modalFileBoxTitreElement);
-    //modalFileBoxElement.appendChild(modalFileBoxMinipixElement);
+
 
   
     const modalFormElement = document.createElement("form");
@@ -614,8 +608,6 @@ function removeProject(projectId){
         }
         else{
             console.log('project ' + projectId + ' removed');
-
-            //document.getElementById("fig_img_"+projectId).remove();
             document.getElementById("fig_mod_img_"+projectId).remove();
 
                //window.location.href = "index.html";
@@ -640,11 +632,7 @@ function removeProject(projectId){
             // all children are removed
             document.getElementById("gallery-id").innerHTML= "";
             genererProjets(data);
-            
-
-            });
-
-            //window.location.href = "index.html";
+                        });
         }
     })
     .catch(error => {
@@ -708,33 +696,6 @@ function addNewProject(formData){
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
     });
-
-
-   /* fetch(`http://localhost:5678/api/works/`)
-    .then(response => {
-        if (!response.ok) {
-            // déclenche le catch error
-            throw new Error('Erreur lors de la requête');
-        }
-        else{
-            
-            response.json().then(data => {
-            console.log('data 2 la revanche');
-            console.log(data);
-            projets = data;
-            // all children are removed
-            document.getElementById("gallery-id").innerHTML= "";
-            genererProjets(data);
-
-            });
-
-            //window.location.href = "index.html";
-        }
-    })
-    .catch(error => {
-        console.error('Une erreur s\'est produite:', error);
-    });*/
-
 }
 
 genererPage();
