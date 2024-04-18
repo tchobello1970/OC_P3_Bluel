@@ -1,10 +1,10 @@
 console.log('login activation');
-const btnConnection = document.getElementById("btn_connection")
 
+const btnConnection = document.getElementById("btn_connection")
 btn_connection.addEventListener("click", (event) => {
     event.preventDefault(); // to prevent page reloading
 
-/* check fields */
+/* check input elements */
     if( verifierChamp(email) && verifierChamp(password)) {
 
         // Création de l’objet du login.
@@ -14,6 +14,7 @@ btn_connection.addEventListener("click", (event) => {
         };
         // Création de la charge utile au format JSON
         const chargeUtile = JSON.stringify(login);
+        console.log(chargeUtile);
     
         const requestOptions = {
             method: 'POST',
@@ -63,10 +64,9 @@ btn_connection.addEventListener("click", (event) => {
  ********************************/
 
 function verifierChamp(champ) {
-    // Si le champ est vide, on lance une exception
+    // Si le champ est vide, on envoie une alerte
     if (champ.value.trim() === "") {
-        //afficherErreur(`Le champ ${champ.id} est vide`);
-        alert(`Le champ ${champ.id} est vide`);
+        alert(`Le champ ${champ.name} est vide`);
         return false;
     }
 
@@ -75,8 +75,7 @@ function verifierChamp(champ) {
         let regex_email = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\.[a-z0-9._-]+");
         let resultat = regex_email.test(champ.value);
         if( resultat === false){
-            //afficherErreur(`Le champ ${champ.id} n'est pas valide`);
-            alert(`Le champ ${champ.id} n'est pas valide`);
+            alert(`Le champ ${champ.name} n'est pas valide`);
             return false;
         }
     }
