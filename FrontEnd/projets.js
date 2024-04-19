@@ -44,16 +44,12 @@ function genererPage(){
 
    // logout
     document.getElementById("nav-logout").addEventListener("click", function(event) {
-        //event.preventDefault();
-        //event.stopPropagation();
         sessionStorage.removeItem("token");
         window.location.href = "index.html";  // go back to main page in all cases
     });
 
     // modify
     document.getElementById("modify-id").addEventListener("click", function(event) {
-        //event.preventDefault();
-        //event.stopPropagation();
         generateModal1();
     });
 }
@@ -204,13 +200,10 @@ function genererProjets(projets){
     generateModal1Gallery();
 }
 
-
-
 function removeModal1Form(){
     console.log('remove view 2')
     document.getElementById("modal-file-box-id").remove();
     document.getElementById("modal-form-id").remove();
-    //TODO remove all eventListeners
 }
 
 
@@ -278,7 +271,6 @@ function generateModal1(){
 
     // add listener to close modal when clicking on X upper right
     document.getElementById("close-id").addEventListener("click", function(event) {
-        //event.preventDefault();
         document.getElementById("modale-1").remove();
         // remove useless listener on body
         document.body.removeEventListener('click', closeModal);
@@ -295,15 +287,10 @@ function generateModal1(){
  ***********************************/
 
 function closeModal(event){
-    //event.preventDefault();
-    //console.log('Modal closing')
-    //console.log(event.target.id);
     if( event.target.id == "modale-1" )
     {
         console.log('Modal closed')
         document.getElementById("modale-1").remove();
-    //    document.getElementById("close-id").removeEventListener('click', closeModal);
-    //    document.getElementById("go-back-id").removeEventListener('click', closeModal);
         document.body.removeEventListener('click', closeModal);   
     }
 };
@@ -379,6 +366,79 @@ function generateModal1Gallery() {
 
 
 
+
+/************************************
+ * 
+ * removes project in backend API when clicking on dustbin
+ * show/hides elements and updates texts
+ * 
+ ***********************************/
+
+function removeProject(projectId){
+    const token =  sessionStorage.getItem("token"); 
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+    };
+
+    fetch(`http://localhost:5678/api/works/${projectId}`, requestOptions)
+    .then(response => {
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            console.log('project ' + projectId + ' removed');
+            document.getElementById("fig_mod_img_"+projectId).remove();
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });
+
+    fetch(`http://localhost:5678/api/works/`)
+    .then(response => {
+        if (!response.ok) {
+            // déclenche le catch error
+            throw new Error('Erreur lors de la requête');
+        }
+        else{
+            
+            response.json().then(data => {
+             projets = data;
+            // all children are removed
+            document.getElementById("gallery-id").innerHTML= "";
+            genererProjets(data);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+    });
+
+
+}
+
+
+function confirmRemoveProject(event){
+    event.preventDefault();
+    const dustbin = event.target;
+    const projectName = dustbin.parentNode.id; // img_5
+    const projectId = projectName.slice(4); // removes first 4 characters
+
+    let confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
+    if (confirmation) {
+        removeProject( projectId );
+    } 
+}
+
+
+
+
+
  /********
  * 
  *   click on add Picture in Modal
@@ -387,14 +447,12 @@ function generateModal1Gallery() {
  ********/
 
 function switchToForm(event){
-    //event.preventDefault();
-    //event.stopPropagation();
     removeModal1Gallery();
     generateModal1Form();
 }
 
 function removeModal1Gallery(){
-    console.log('remove view 1');
+    //console.log('remove view 1');
 
     document.getElementById("btn-val").removeEventListener("click", switchToForm);
     document.getElementById("modal-gallery-id").remove();
@@ -412,7 +470,7 @@ function removeModal1Gallery(){
 
 
 function generateModal1Form(){
-    console.log('create view 2');
+    //console.log('create view 2');
     //shows go-back button
     document.getElementById("go-back-id").classList.remove("hidden");
     //change title 
@@ -462,8 +520,7 @@ function generateModal1Form(){
         name: 'image',
         id: 'imageInput',
         accept: '.png, .jpg',
-        //required: true
-    });
+      });
     modalFormInputImgElement.classList.add("hidden");
 
     const modalLabelTitreElement = document.createElement("label");
@@ -475,8 +532,7 @@ function generateModal1Form(){
         type: 'text',
         name: 'title',
         id: 'titre',
-        //required: true
-    });
+     });
     
 
     const modalLabelCategorieElement = document.createElement("label");
@@ -486,14 +542,8 @@ function generateModal1Form(){
     const modalSelectCategorieElement = document.createElement("select");
     modalSelectCategorieElement.name = "category";
     modalSelectCategorieElement.id = "categorie";
-    //modalSelectCategorieElement.required = true;
-    
-  /*  const optionElement = document.createElement("option");
-    optionElement.innerText = "";
-    optionElement.value = 0;
-    
-    modalSelectCategorieElement.appendChild(optionElement);*/
 
+    
     let i = 0;
     for (const category of categorySet.values()){
         const optionElement = document.createElement("option");
@@ -531,6 +581,13 @@ function generateModal1Form(){
     document.getElementById('btn-add').textContent = "+ Ajouter photo";
     
 
+
+/************************************************
+ * 
+ * check if all 3 fileds are valid in order to make submit possible
+ * 
+ ***********************************************/
+
     function checkFormValues(){
         if( document.getElementById('titre').value.trim() !== "" 
         && document.getElementById('categorie').value > 0 
@@ -543,15 +600,12 @@ function generateModal1Form(){
     }
 
 
-
-
-
-    /********
+/**************************
  * 
  *   load image in fileBox
- * 
- * 
- ********/
+ *   add listener to all fields
+ *
+ **************************/
     
     document.getElementById('btn-add').addEventListener('click', function(event) {
         event.preventDefault(); 
@@ -561,7 +615,6 @@ function generateModal1Form(){
       
     document.getElementById('imageInput').addEventListener('change', function(event) {
         event.preventDefault();
-        //event.stopPropagation();
         const file = event.target.files[0];
         
         if (file) {
@@ -576,7 +629,7 @@ function generateModal1Form(){
           
             reader.onload = function(event) {
             const imgElement = document.createElement('img');
-            //les données binaires de l'image
+            //binary data of the picture
             imgElement.src = event.target.result;
             imgElement.classList.add("modal-filebox-minipix");
             
@@ -592,13 +645,11 @@ function generateModal1Form(){
 
     document.getElementById('titre').addEventListener('change', function(event) {
         event.preventDefault();
-        //event.stopPropagation();
         checkFormValues();
     });
 
     document.getElementById('categorie').addEventListener('change', function(event) {
         event.preventDefault();
-        //event.stopPropagation();
         checkFormValues();
     });
 
@@ -611,8 +662,7 @@ function generateModal1Form(){
  ********/
 
     document.getElementById('modal-form-id').addEventListener('submit', function(event) {
-        event.preventDefault(); // Empêcher le formulaire de se soumettre par défaut
-        //event.stopPropagation();
+        event.preventDefault();
         const formData = new FormData(event.target); //the element form
         //console.log(event.target);
         console.log('formData entries');
@@ -633,77 +683,6 @@ function generateModal1Form(){
 
 
 
-/************************************
- * 
- * removes project in backend API when clicking on dustbin
- * show/hides elements and updates texts
- * 
- ***********************************/
-
-
-function confirmRemoveProject(event){
-    event.preventDefault();
-    event.stopPropagation();
-    const dustbin = event.target;
-    const projectName = dustbin.parentNode.id; // img_5
-    const projectId = projectName.slice(4); // removes first 4 characters
-
-    let confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce projet ?");
-    if (confirmation) {
-        removeProject( projectId );
-    } 
-}
-
-
-function removeProject(projectId){
-    const token =  sessionStorage.getItem("token"); 
-    
-    const requestOptions = {
-        method: 'DELETE',
-        headers: {
-            accept: "*/*",
-            Authorization: `Bearer ${token}`,
-          },
-    };
-
-    fetch(`http://localhost:5678/api/works/${projectId}`, requestOptions)
-    .then(response => {
-        if (!response.ok) {
-            // déclenche le catch error
-            throw new Error('Erreur lors de la requête');
-        }
-        else{
-            console.log('project ' + projectId + ' removed');
-            document.getElementById("fig_mod_img_"+projectId).remove();
-        }
-    })
-    .catch(error => {
-        console.error('Une erreur s\'est produite:', error);
-    });
-
-    fetch(`http://localhost:5678/api/works/`)
-    .then(response => {
-        if (!response.ok) {
-            // déclenche le catch error
-            throw new Error('Erreur lors de la requête');
-        }
-        else{
-            
-            response.json().then(data => {
-             projets = data;
-            // all children are removed
-            document.getElementById("gallery-id").innerHTML= "";
-            genererProjets(data);
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Une erreur s\'est produite:', error);
-    });
-
-
-}
-
 
 function addNewProject(formData){
     const token =  sessionStorage.getItem("token"); 
@@ -713,7 +692,6 @@ function addNewProject(formData){
         headers: {
             accept: "application/json",
             Authorization: `Bearer ${token}`,
-        //    "Content-Type": "multipart/form-data"
         },
         body:formData
     };
@@ -734,7 +712,6 @@ function addNewProject(formData){
                     throw new Error('Erreur lors de la requête');
                 }
                 else{
-                    
                     response.json().then(data => {
                     console.log('data 2 la revanche');
                     console.log(data);
@@ -756,9 +733,41 @@ function addNewProject(formData){
     });
 }
 
+
+document.getElementById("btn-sendmail").addEventListener("click", sendMail );
+
+function sendMail(event){
+    event.preventDefault();
+    console.log(event.target);
+    if( verifierChamp(nom) && verifierChamp(email) && verifierChamp(message)) {
+        console.log('Envoi Email')
+    }
+};
+
+/********************************
+ *  check if empty
+ *  specific regex check on email 
+ ********************************/
+
+function verifierChamp(champ) {
+    // Si le champ est vide, on envoie une alerte
+    if (champ.value.trim() === "") {
+        alert(`Le champ ${champ.name} est vide`);
+        return false;
+    }
+
+    if (champ.type === "email")
+    {
+        let regex_email = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\.[a-z0-9._-]+");
+        let resultat = regex_email.test(champ.value);
+        if( resultat === false){
+            alert(`Le champ ${champ.name} n'est pas valide`);
+            return false;
+        }
+    }
+    return true;
+}
+
 genererPage();
-
-
-
 
 

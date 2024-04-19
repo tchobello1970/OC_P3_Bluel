@@ -520,6 +520,10 @@ input[type="submit"]{
 	cursor: pointer;
 }
 
+#btn-sendmail{
+	cursor: pointer;
+}
+
 
 .hidden{
 	display: none;
