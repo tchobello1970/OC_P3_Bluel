@@ -624,11 +624,6 @@ function generateModal1Form(){
         //formData.set("image", project_file);
         formData.set("title", formData.get("title").trim());
 
-        console.log('formData 2');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
         addNewProject(formData);
 
     });
@@ -725,7 +720,6 @@ function addNewProject(formData){
 
     fetch(`http://localhost:5678/api/works/`, requestOptions)
     .then(response => {
-
         if (!response.ok) {
             // déclenche le catch error
             throw new Error('Erreur lors de la requête');
@@ -755,10 +749,7 @@ function addNewProject(formData){
             .catch(error => {
                 console.error('Une erreur s\'est produite:', error);
             });
-
-
         }
-
     })
     .catch(error => {
         console.error('Une erreur s\'est produite:', error);
