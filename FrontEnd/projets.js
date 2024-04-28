@@ -29,7 +29,7 @@ function genererPage(){
 
     //Elements hidden if logged or not
     if( sessionStorage.getItem("token")){
-        //console.log('token : '+sessionStorage.getItem("token"))
+        console.log('token : '+sessionStorage.getItem("token"))
         document.getElementById("nav-login").classList.add("hidden");
     }
     else{
@@ -640,8 +640,6 @@ function generateModal1Form(){
             console.log(pair[0] + ', ' + pair[1]);
         }
         
-        //const project_file = document.getElementById("imageInput").files[0];
-        //formData.set("image", project_file);
         formData.set("title", formData.get("title").trim());
 
         addNewProject(formData);
@@ -683,8 +681,6 @@ function addNewProject(formData){
                 }
                 else{
                     response.json().then(data => {
-                    console.log('data 2 la revanche');
-                    console.log(data);
                     projets = data;
                     // all children are removed
                     document.getElementById("gallery-id").innerHTML= "";
@@ -708,7 +704,7 @@ document.getElementById("btn-sendmail").addEventListener("click", sendMail );
 
 function sendMail(event){
     event.preventDefault();
-    console.log(event.target);
+
     if( verifierChamp(nom) && verifierChamp(email) && verifierChamp(message)) {
         console.log('Envoi Email')
     }
