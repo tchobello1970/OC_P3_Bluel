@@ -64,35 +64,6 @@ function genererPage(){
  * 
  **********************************/
 
-function genererFiltres0(){
- 
-    // a new Set of categories is created
-    Object.values( categories ).forEach( category => {
-        if( categorySet.has(category.name) === false ){
-            categorySet.add(category.name);       
-    }});
-
-    // add filters Elements in the DOM
-    const sectionFilters = document.querySelector(".filters");
- 
-    // 'Tout' button, not in categories
-    const filterElement = document.createElement("button");
-    filterElement.innerText = "Tout";
-    filterElement.classList.add("filter", "filter-selected");
-    sectionFilters.appendChild(filterElement);
-
-    // listener dded to all filters
-    ajouteListenerFiltre(filterElement);
-    
-    categorySet.forEach( category => {
-        const filterElement = document.createElement("button");
-        filterElement.innerText = category;
-        filterElement.classList.add("filter");
-        sectionFilters.appendChild(filterElement);
-        ajouteListenerFiltre(filterElement);
-    });
-}
-
 function genererFiltres(){
  
     // a new Set of categories is created
@@ -195,7 +166,6 @@ function genererProjets(projets){
 
  function switchToGallery(event){
     event.preventDefault();
-    //event.stopPropagation();
     removeModal1Form();
     generateModal1Gallery();
 }
