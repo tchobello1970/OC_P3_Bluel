@@ -1,7 +1,7 @@
 console.log('login activation');
 
 const btnConnection = document.getElementById("btn_connection")
-btn_connection.addEventListener("click", (event) => {
+btnConnection.addEventListener("click", (event) => {
     event.preventDefault(); // to prevent page reloading
 
 /* check input elements */
@@ -24,7 +24,7 @@ btn_connection.addEventListener("click", (event) => {
         
 
     /* 
-        connexion à l'API
+        connexion grâce à l'API
         le fetch renvoie un Promise (resolve,reject)
 
         then renvoie la réponse en cas de succès et 

@@ -75,8 +75,7 @@ function genererFiltres(){
 
     // add filters Elements in the DOM
     const sectionFilters = document.querySelector(".filters");
- 
-   
+    
     categorySet.forEach( category => {
         const filterElement = document.createElement("button");
         filterElement.innerText = category;
@@ -643,13 +642,8 @@ function generateModal1Form(){
         formData.set("title", formData.get("title").trim());
 
         addNewProject(formData);
-
     });
 }
-
-
-
-
 
 
 function addNewProject(formData){
