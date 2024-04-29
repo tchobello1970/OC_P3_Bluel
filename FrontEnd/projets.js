@@ -69,9 +69,13 @@ function genererFiltres(){
     // a new Set of categories is created
     categorySet.add("Tout");
     Object.values( categories ).forEach( category => {
-        if( categorySet.has(category.name) === false ){
-            categorySet.add(category.name);       
-    }});
+     /*   if( categorySet.has(category.name) === false ){
+            categorySet.add(category.name);
+                    
+    }*/
+    // useless test in Set.
+        categorySet.add(category.name);
+});
 
     // add filters Elements in the DOM
     const sectionFilters = document.querySelector(".filters");
